@@ -1,14 +1,16 @@
-# Model interface {#interface}
+# Model specification {#interface}
 
 A consistent interface across models is essential.
 
-## Model input
-
-## Formula specification
+## Model formula
 ### Transformations
 
 `vignette("transformations", package="fable")`
 
 ### Specials
 
-## Model output
+## Selection parameters
+
+## Optimisation parameters
+
+## Computational parameters

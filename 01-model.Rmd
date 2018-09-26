@@ -8,4 +8,4 @@ The model function is expected to accept a tsibble and model formula, and return
 
 The flexibility of tsibble requires additional checks to ensure that the input time series is appropriate for the model being used.
 
-## Object return
+## Object output
