@@ -2,7 +2,13 @@
 
 ## The fable object
 
+* Index
+* Mean (backtransformed and bias adjusted)
+* Standard error (may not be needed)
+* Distribution
+
 ## Accessing forecasts
+https://github.com/tidyverts/fasster/issues/38
 
 ## Bootstrapping
 
