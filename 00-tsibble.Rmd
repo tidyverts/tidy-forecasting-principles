@@ -1,2 +1,29 @@
 # Tidy time series {#tsibble}
 
+Time series data structures in R vary substantially, however most time series models make use of the `ts` object structure from the `stats` package. This object concisely stores the time series index using three 'time series parameters' (`tsp`): `start`, `frequency`, and `end`. For most time series tools (such as `arima`, `ets`, `stl`) this structural information is sufficient, however it lacks details that are present in modern time series datasets:
+
+* Multiple seasonality
+* Irregular observations
+* Exogenous information
+* Many time series (that differ in length)
+
+In many senses this structure is limited, and inconsistent with the [tidy data principles](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html):
+
+* Non-rectangular index structure
+* Wide-format for keyed data (`mts`)
+* Unnatural index format for importing data
+* Difficulty working with tidyverse tools
+
+## tsibble
+
+The [tsibble package](https://github.com/tidyverts/tsibble) by [Earo Wang](https://github.com/earowang) provides a tidy data structure for time series, and is well described in her [introductory vignette](https://pkg.earo.me/tsibble/articles/intro-tsibble.html).
+
+This data structure is sufficiently flexible to support the future of time series modelling tools (such as `tbats`, `fasster` and `prophet`). Beyond the data tidying and transformation tools that the package provides, the object also includes valuable structural information (`index` and `key`) for time series modelling.
+
+### index
+
+The index is essential for modelling as it can be used to identify the frequency and regularity of the observations. By storing a standard `datetime` object within the dataset, it makes irregular time series modelling possible. It also allows a more flexible specification of seasonal frequency (see [seasonal period][interface]) that is easier to specify for the end user (a very [common difficulty](https://robjhyndman.com/hyndsight/seasonal-periods/) when constructing `ts` objects).
+
+### key
+
+The key ...
