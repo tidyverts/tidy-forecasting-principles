@@ -1,2 +1,7 @@
-# Accuracy evaluation {#accuracy}
+# Forecast evaluation {#accuracy}
 
+## Accuracy
+
+## Cross validation
+
+## Visualisation

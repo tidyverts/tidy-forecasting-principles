@@ -1,2 +1,9 @@
 # Forecasting {#forecast}
 
+## The fable object
+
+## Accessing forecasts
+
+## Bootstrapping
+
+## Visualisation

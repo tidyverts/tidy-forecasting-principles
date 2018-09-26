@@ -1,2 +1,22 @@
 # Model methods {#methods}
 
+## Display
+
+## Accessibility
+
+augment(), tidy(), glance()
+
+## Components
+
+## Interpolation
+
+## Re-estimation
+https://github.com/tidyverts/fable/issues/43
+
+### refit()
+
+### stream()
+
+## Simulation
+
+## Visualisation

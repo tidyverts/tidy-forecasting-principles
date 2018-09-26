@@ -1,2 +1,9 @@
 # Model interface {#interface}
 
+## Model input
+
+## Formula specification
+### Transformations
+### Specials
+
+## Model output

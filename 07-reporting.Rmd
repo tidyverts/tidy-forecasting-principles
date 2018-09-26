@@ -1,0 +1,6 @@
+# Reporting {#report}
+
+## Model equations
+https://github.com/tidyverts/fable/issues/4
+
+## Object summaries

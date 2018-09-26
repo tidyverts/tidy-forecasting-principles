@@ -1,2 +1,7 @@
 # Model basics {#model}
 
+## Data handling
+
+## Object return
+
+## Keeping things simple
