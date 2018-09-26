@@ -26,4 +26,4 @@ The index is essential for modelling as it can be used to identify the frequency
 
 ### key
 
-The key ...
+Keys are used within tsibble to uniquely identify related time series in a tidy structure. They are also useful for identifying relational structures between each time series. This is especially useful for [forecast reconciliation](https://otexts.org/fpp2/hierarchical.html), where a hierarchical or grouped structure is imposed on a set of forecasts to impose relational constraints (typically aggregation). Keys within tsibble can be either nested (hierarchical) or crossed (grouped), and can be directly used to reconcile forecasts. This structure also has purpose for univariate models, as it allows [batch forecasting][advanced] to be applied across many time series.
