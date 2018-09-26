@@ -1,9 +1,14 @@
 # Advanced modelling {#advanced}
 
+## Batch
+https://github.com/tidyverts/fable/wiki/Tidy-forecasting-with-the-fable-package
+
 ## Decomposition
+https://github.com/tidyverts/fable/wiki/Combining-models
 
 ## Ensemble
 
-## Reconciliation
-
 ## Boosting
+
+## Reconciliation
+https://github.com/tidyverts/fable/issues/36

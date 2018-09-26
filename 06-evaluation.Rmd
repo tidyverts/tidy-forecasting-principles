@@ -1,7 +1,15 @@
 # Forecast evaluation {#accuracy}
 
+Where possible, the accuracy evaluation should be handled by existing tidymodels tools such as [yardstick](https://tidymodels.github.io/yardstick/). It is likely that some changes or extensions will be needed for full support of time series accuracy metrics.
+
 ## Accuracy
 
+The [forecast package](https://github.com/robjhyndman/forecast/) implements accuracy as a function which is applied to a model. Out of sample accuracy can be computed by additionally providing a test set.
+
+It is probably more transparent to compute accuracy metrics by directly providing actual response values and model predictions.
+
 ## Cross validation
+
+`CV(tsbl, mdl, h, window_type, ...)`
 
 ## Visualisation

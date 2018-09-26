@@ -71,7 +71,6 @@
 <li class="chapter" data-level="3" data-path="model.html"><a href="model.html"><i class="fa fa-check"></i><b>3</b> Model basics</a><ul>
 <li class="chapter" data-level="3.1" data-path="model.html"><a href="model.html#data-handling"><i class="fa fa-check"></i><b>3.1</b> Data handling</a></li>
 <li class="chapter" data-level="3.2" data-path="model.html"><a href="model.html#object-return"><i class="fa fa-check"></i><b>3.2</b> Object return</a></li>
-<li class="chapter" data-level="3.3" data-path="model.html"><a href="model.html#keeping-things-simple"><i class="fa fa-check"></i><b>3.3</b> Keeping things simple</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="interface.html"><a href="interface.html"><i class="fa fa-check"></i><b>4</b> Model interface</a><ul>
 <li class="chapter" data-level="4.1" data-path="interface.html"><a href="interface.html#model-input"><i class="fa fa-check"></i><b>4.1</b> Model input</a></li>
@@ -88,10 +87,11 @@
 <li class="chapter" data-level="5.7" data-path="methods.html"><a href="methods.html#visualisation"><i class="fa fa-check"></i><b>5.7</b> Visualisation</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced.html"><a href="advanced.html"><i class="fa fa-check"></i><b>6</b> Advanced modelling</a><ul>
-<li class="chapter" data-level="6.1" data-path="advanced.html"><a href="advanced.html#decomposition"><i class="fa fa-check"></i><b>6.1</b> Decomposition</a></li>
-<li class="chapter" data-level="6.2" data-path="advanced.html"><a href="advanced.html#ensemble"><i class="fa fa-check"></i><b>6.2</b> Ensemble</a></li>
-<li class="chapter" data-level="6.3" data-path="advanced.html"><a href="advanced.html#reconciliation"><i class="fa fa-check"></i><b>6.3</b> Reconciliation</a></li>
+<li class="chapter" data-level="6.1" data-path="advanced.html"><a href="advanced.html#batch"><i class="fa fa-check"></i><b>6.1</b> Batch</a></li>
+<li class="chapter" data-level="6.2" data-path="advanced.html"><a href="advanced.html#decomposition"><i class="fa fa-check"></i><b>6.2</b> Decomposition</a></li>
+<li class="chapter" data-level="6.3" data-path="advanced.html"><a href="advanced.html#ensemble"><i class="fa fa-check"></i><b>6.3</b> Ensemble</a></li>
 <li class="chapter" data-level="6.4" data-path="advanced.html"><a href="advanced.html#boosting"><i class="fa fa-check"></i><b>6.4</b> Boosting</a></li>
+<li class="chapter" data-level="6.5" data-path="advanced.html"><a href="advanced.html#reconciliation"><i class="fa fa-check"></i><b>6.5</b> Reconciliation</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="forecast.html"><a href="forecast.html"><i class="fa fa-check"></i><b>7</b> Forecasting</a><ul>
 <li class="chapter" data-level="7.1" data-path="forecast.html"><a href="forecast.html#the-fable-object"><i class="fa fa-check"></i><b>7.1</b> The fable object</a></li>
@@ -127,6 +127,7 @@
             <section class="normal" id="section-">
 <div id="interface" class="section level1">
 <h1><span class="header-section-number">4</span> Model interface</h1>
+<p>A consistent interface across models is essential.</p>
 <div id="model-input" class="section level2">
 <h2><span class="header-section-number">4.1</span> Model input</h2>
 </div>
@@ -134,6 +135,7 @@
 <h2><span class="header-section-number">4.2</span> Formula specification</h2>
 <div id="transformations" class="section level3">
 <h3><span class="header-section-number">4.2.1</span> Transformations</h3>
+<p><code>vignette(&quot;transformations&quot;, package=&quot;fable&quot;)</code></p>
 </div>
 <div id="specials" class="section level3">
 <h3><span class="header-section-number">4.2.2</span> Specials</h3>

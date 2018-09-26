@@ -13,3 +13,7 @@ https://github.com/tidyverts/fasster/issues/38
 ## Bootstrapping
 
 ## Visualisation
+
+* geom_forecast
+* autoplot
+* autolayer

@@ -71,7 +71,6 @@
 <li class="chapter" data-level="3" data-path="model.html"><a href="model.html"><i class="fa fa-check"></i><b>3</b> Model basics</a><ul>
 <li class="chapter" data-level="3.1" data-path="model.html"><a href="model.html#data-handling"><i class="fa fa-check"></i><b>3.1</b> Data handling</a></li>
 <li class="chapter" data-level="3.2" data-path="model.html"><a href="model.html#object-return"><i class="fa fa-check"></i><b>3.2</b> Object return</a></li>
-<li class="chapter" data-level="3.3" data-path="model.html"><a href="model.html#keeping-things-simple"><i class="fa fa-check"></i><b>3.3</b> Keeping things simple</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="interface.html"><a href="interface.html"><i class="fa fa-check"></i><b>4</b> Model interface</a><ul>
 <li class="chapter" data-level="4.1" data-path="interface.html"><a href="interface.html#model-input"><i class="fa fa-check"></i><b>4.1</b> Model input</a></li>
@@ -88,10 +87,11 @@
 <li class="chapter" data-level="5.7" data-path="methods.html"><a href="methods.html#visualisation"><i class="fa fa-check"></i><b>5.7</b> Visualisation</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced.html"><a href="advanced.html"><i class="fa fa-check"></i><b>6</b> Advanced modelling</a><ul>
-<li class="chapter" data-level="6.1" data-path="advanced.html"><a href="advanced.html#decomposition"><i class="fa fa-check"></i><b>6.1</b> Decomposition</a></li>
-<li class="chapter" data-level="6.2" data-path="advanced.html"><a href="advanced.html#ensemble"><i class="fa fa-check"></i><b>6.2</b> Ensemble</a></li>
-<li class="chapter" data-level="6.3" data-path="advanced.html"><a href="advanced.html#reconciliation"><i class="fa fa-check"></i><b>6.3</b> Reconciliation</a></li>
+<li class="chapter" data-level="6.1" data-path="advanced.html"><a href="advanced.html#batch"><i class="fa fa-check"></i><b>6.1</b> Batch</a></li>
+<li class="chapter" data-level="6.2" data-path="advanced.html"><a href="advanced.html#decomposition"><i class="fa fa-check"></i><b>6.2</b> Decomposition</a></li>
+<li class="chapter" data-level="6.3" data-path="advanced.html"><a href="advanced.html#ensemble"><i class="fa fa-check"></i><b>6.3</b> Ensemble</a></li>
 <li class="chapter" data-level="6.4" data-path="advanced.html"><a href="advanced.html#boosting"><i class="fa fa-check"></i><b>6.4</b> Boosting</a></li>
+<li class="chapter" data-level="6.5" data-path="advanced.html"><a href="advanced.html#reconciliation"><i class="fa fa-check"></i><b>6.5</b> Reconciliation</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="forecast.html"><a href="forecast.html"><i class="fa fa-check"></i><b>7</b> Forecasting</a><ul>
 <li class="chapter" data-level="7.1" data-path="forecast.html"><a href="forecast.html#the-fable-object"><i class="fa fa-check"></i><b>7.1</b> The fable object</a></li>
@@ -127,11 +127,15 @@
             <section class="normal" id="section-">
 <div id="accuracy" class="section level1">
 <h1><span class="header-section-number">8</span> Forecast evaluation</h1>
+<p>Where possible, the accuracy evaluation should be handled by existing tidymodels tools such as <a href="https://tidymodels.github.io/yardstick/">yardstick</a>. It is likely that some changes or extensions will be needed for full support of time series accuracy metrics.</p>
 <div id="accuracy-1" class="section level2">
 <h2><span class="header-section-number">8.1</span> Accuracy</h2>
+<p>The <a href="https://github.com/robjhyndman/forecast/">forecast package</a> implements accuracy as a function which is applied to a model. Out of sample accuracy can be computed by additionally providing a test set.</p>
+<p>It is probably more transparent to compute accuracy metrics by directly providing actual response values and model predictions.</p>
 </div>
 <div id="cross-validation" class="section level2">
 <h2><span class="header-section-number">8.2</span> Cross validation</h2>
+<p><code>CV(tsbl, mdl, h, window_type, ...)</code></p>
 </div>
 <div id="visualisation-2" class="section level2">
 <h2><span class="header-section-number">8.3</span> Visualisation</h2>
