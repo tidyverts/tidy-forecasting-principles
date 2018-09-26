@@ -71,7 +71,6 @@
 <li class="chapter" data-level="3" data-path="model.html"><a href="model.html"><i class="fa fa-check"></i><b>3</b> Model basics</a><ul>
 <li class="chapter" data-level="3.1" data-path="model.html"><a href="model.html#data-handling"><i class="fa fa-check"></i><b>3.1</b> Data handling</a></li>
 <li class="chapter" data-level="3.2" data-path="model.html"><a href="model.html#object-return"><i class="fa fa-check"></i><b>3.2</b> Object return</a></li>
-<li class="chapter" data-level="3.3" data-path="model.html"><a href="model.html#keeping-things-simple"><i class="fa fa-check"></i><b>3.3</b> Keeping things simple</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="interface.html"><a href="interface.html"><i class="fa fa-check"></i><b>4</b> Model interface</a><ul>
 <li class="chapter" data-level="4.1" data-path="interface.html"><a href="interface.html#model-input"><i class="fa fa-check"></i><b>4.1</b> Model input</a></li>
@@ -85,6 +84,7 @@
 <li class="chapter" data-level="5.4" data-path="methods.html"><a href="methods.html#interpolation"><i class="fa fa-check"></i><b>5.4</b> Interpolation</a></li>
 <li class="chapter" data-level="5.5" data-path="methods.html"><a href="methods.html#re-estimation"><i class="fa fa-check"></i><b>5.5</b> Re-estimation</a></li>
 <li class="chapter" data-level="5.6" data-path="methods.html"><a href="methods.html#simulation"><i class="fa fa-check"></i><b>5.6</b> Simulation</a></li>
+<li class="chapter" data-level="5.7" data-path="methods.html"><a href="methods.html#visualisation"><i class="fa fa-check"></i><b>5.7</b> Visualisation</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced.html"><a href="advanced.html"><i class="fa fa-check"></i><b>6</b> Advanced modelling</a><ul>
 <li class="chapter" data-level="6.1" data-path="advanced.html"><a href="advanced.html#decomposition"><i class="fa fa-check"></i><b>6.1</b> Decomposition</a></li>
@@ -95,10 +95,18 @@
 <li class="chapter" data-level="7" data-path="forecast.html"><a href="forecast.html"><i class="fa fa-check"></i><b>7</b> Forecasting</a><ul>
 <li class="chapter" data-level="7.1" data-path="forecast.html"><a href="forecast.html#the-fable-object"><i class="fa fa-check"></i><b>7.1</b> The fable object</a></li>
 <li class="chapter" data-level="7.2" data-path="forecast.html"><a href="forecast.html#accessing-forecasts"><i class="fa fa-check"></i><b>7.2</b> Accessing forecasts</a></li>
+<li class="chapter" data-level="7.3" data-path="forecast.html"><a href="forecast.html#bootstrapping"><i class="fa fa-check"></i><b>7.3</b> Bootstrapping</a></li>
+<li class="chapter" data-level="7.4" data-path="forecast.html"><a href="forecast.html#visualisation-1"><i class="fa fa-check"></i><b>7.4</b> Visualisation</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="accuracy.html"><a href="accuracy.html"><i class="fa fa-check"></i><b>8</b> Accuracy evaluation</a></li>
-<li class="chapter" data-level="9" data-path="vis.html"><a href="vis.html"><i class="fa fa-check"></i><b>9</b> Visualisation</a></li>
-<li class="chapter" data-level="10" data-path="report.html"><a href="report.html"><i class="fa fa-check"></i><b>10</b> Reporting</a></li>
+<li class="chapter" data-level="8" data-path="accuracy.html"><a href="accuracy.html"><i class="fa fa-check"></i><b>8</b> Forecast evaluation</a><ul>
+<li class="chapter" data-level="8.1" data-path="accuracy.html"><a href="accuracy.html#accuracy-1"><i class="fa fa-check"></i><b>8.1</b> Accuracy</a></li>
+<li class="chapter" data-level="8.2" data-path="accuracy.html"><a href="accuracy.html#cross-validation"><i class="fa fa-check"></i><b>8.2</b> Cross validation</a></li>
+<li class="chapter" data-level="8.3" data-path="accuracy.html"><a href="accuracy.html#visualisation-2"><i class="fa fa-check"></i><b>8.3</b> Visualisation</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="report.html"><a href="report.html"><i class="fa fa-check"></i><b>9</b> Reporting</a><ul>
+<li class="chapter" data-level="9.1" data-path="report.html"><a href="report.html#model-equations"><i class="fa fa-check"></i><b>9.1</b> Model equations</a></li>
+<li class="chapter" data-level="9.2" data-path="report.html"><a href="report.html#object-summaries"><i class="fa fa-check"></i><b>9.2</b> Object summaries</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -118,14 +126,14 @@
             <section class="normal" id="section-">
 <div id="model" class="section level1">
 <h1><span class="header-section-number">3</span> Model basics</h1>
+<p>The <a href="https://github.com/tidyverts/fablelite">fablelite</a> package provides a set of tools for creating models that work well together. These tools aim to simplify model development and encourage a consistent interface across many model types. By developing a model with fablelite, complexity introduced by batch forecasting and <a href="advanced.html#advanced">advanced functionality</a> is handled automatically. This should allow model developers to focus on implementing model specific functionality.</p>
+<p>The model function is expected to accept a tsibble and model formula, and return a fitted model stored as a mable.</p>
 <div id="data-handling" class="section level2">
 <h2><span class="header-section-number">3.1</span> Data handling</h2>
+<p>The flexibility of tsibble requires additional checks to ensure that the input time series is appropriate for the model being used.</p>
 </div>
 <div id="object-return" class="section level2">
 <h2><span class="header-section-number">3.2</span> Object return</h2>
-</div>
-<div id="keeping-things-simple" class="section level2">
-<h2><span class="header-section-number">3.3</span> Keeping things simple</h2>
 
 </div>
 </div>

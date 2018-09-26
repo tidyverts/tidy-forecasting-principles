@@ -1,7 +1,11 @@
 # Model basics {#model}
 
+The [fablelite](https://github.com/tidyverts/fablelite) package provides a set of tools for creating models that work well together. These tools aim to simplify model development and encourage a consistent interface across many model types. By developing a model with fablelite, complexity introduced by batch forecasting and [advanced functionality](#advanced) is handled automatically. This should allow model developers to focus on implementing model specific functionality.
+
+The model function is expected to accept a tsibble and model formula, and return a fitted model stored as a mable.
+
 ## Data handling
 
-## Object return
+The flexibility of tsibble requires additional checks to ensure that the input time series is appropriate for the model being used.
 
-## Keeping things simple
+## Object return
