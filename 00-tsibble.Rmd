@@ -1,5 +1,7 @@
 # Tidy time series {#tsibble}
 
+## ts
+
 Time series data structures in R vary substantially, however most time series models make use of the `ts` object structure from the `stats` package. This object concisely stores the time series index using three 'time series parameters' (`tsp`): `start`, `frequency`, and `end`. For most time series tools (such as `arima`, `ets`, `stl`) this structural information is sufficient, however it lacks details that are present in modern time series datasets:
 
 * Multiple seasonality

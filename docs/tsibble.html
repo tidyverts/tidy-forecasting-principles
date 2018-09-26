@@ -65,9 +65,8 @@
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
 <li class="chapter" data-level="2" data-path="tsibble.html"><a href="tsibble.html"><i class="fa fa-check"></i><b>2</b> Tidy time series</a><ul>
-<li class="chapter" data-level="2.1" data-path="tsibble.html"><a href="tsibble.html#tsibble-1"><i class="fa fa-check"></i><b>2.1</b> tsibble</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="tsibble.html"><a href="tsibble.html#index"><i class="fa fa-check"></i><b>2.1.1</b> index</a></li>
-</ul></li>
+<li class="chapter" data-level="2.1" data-path="tsibble.html"><a href="tsibble.html#ts"><i class="fa fa-check"></i><b>2.1</b> ts</a></li>
+<li class="chapter" data-level="2.2" data-path="tsibble.html"><a href="tsibble.html#tsibble-1"><i class="fa fa-check"></i><b>2.2</b> tsibble</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="model.html"><a href="model.html"><i class="fa fa-check"></i><b>3</b> Model basics</a></li>
 <li class="chapter" data-level="4" data-path="interface.html"><a href="interface.html"><i class="fa fa-check"></i><b>4</b> Model interface</a></li>
@@ -96,6 +95,8 @@
             <section class="normal" id="section-">
 <div id="tsibble" class="section level1">
 <h1><span class="header-section-number">2</span> Tidy time series</h1>
+<div id="ts" class="section level2">
+<h2><span class="header-section-number">2.1</span> ts</h2>
 <p>Time series data structures in R vary substantially, however most time series models make use of the <code>ts</code> object structure from the <code>stats</code> package. This object concisely stores the time series index using three ‘time series parameters’ (<code>tsp</code>): <code>start</code>, <code>frequency</code>, and <code>end</code>. For most time series tools (such as <code>arima</code>, <code>ets</code>, <code>stl</code>) this structural information is sufficient, however it lacks details that are present in modern time series datasets:</p>
 <ul>
 <li>Multiple seasonality</li>
@@ -110,12 +111,18 @@
 <li>Unnatural index format for importing data</li>
 <li>Difficulty working with tidyverse tools</li>
 </ul>
+</div>
 <div id="tsibble-1" class="section level2">
-<h2><span class="header-section-number">2.1</span> tsibble</h2>
+<h2><span class="header-section-number">2.2</span> tsibble</h2>
 <p>The <a href="https://github.com/tidyverts/tsibble">tsibble package</a> by <a href="https://github.com/earowang">Earo Wang</a> provides a tidy data structure for time series, and is well described in her <a href="https://pkg.earo.me/tsibble/articles/intro-tsibble.html">introductory vignette</a>.</p>
 <p>This data structure is sufficiently flexible to support the future of time series modelling tools (such as <code>tbats</code>, <code>fasster</code> and <code>prophet</code>). Beyond the data tidying and transformation tools that the package provides, the object also includes valuable structural information (<code>index</code> and <code>key</code>) for time series modelling.</p>
 <div id="index" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> index</h3>
+<h3><span class="header-section-number">2.2.1</span> index</h3>
+<p>The index is essential for modelling as it can be used to identify the frequency and regularity of the observations. By storing a standard <code>datetime</code> object within the dataset, it makes irregular time series modelling possible. It also allows a more flexible specification of seasonal frequency (see [seasonal period][interface]) that is easier to specify for the end user (a very <a href="https://robjhyndman.com/hyndsight/seasonal-periods/">common difficulty</a> when constructing <code>ts</code> objects).</p>
+</div>
+<div id="key" class="section level3">
+<h3><span class="header-section-number">2.2.2</span> key</h3>
+<p>Keys are used within tsibble to uniquely identify related time series in a tidy structure. They are also useful for identifying relational structures between each time series. This is especially useful for <a href="https://otexts.org/fpp2/hierarchical.html">forecast reconciliation</a>, where a hierarchical or grouped structure is imposed on a set of forecasts to impose relational constraints (typically aggregation). Keys within tsibble can be either nested (hierarchical) or crossed (grouped), and can be directly used to reconcile forecasts. This structure also has purpose for univariate models, as it allows [batch forecasting][advanced] to be applied across many time series.</p>
 
 </div>
 </div>
