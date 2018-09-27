@@ -25,15 +25,20 @@ https://github.com/tidyverts/fable/issues/43
 
 ## Simulation
 
-Simulations for time series differ in that it is also reasonable to simulate future paths from the model.
+Much like the `tidymodels` option toward `predict`, `simulate` should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.
 
-For consistency with `stats::simulate()`, the simulate method for a fable model should accept these arguments:
+The simulate method for a fable model should accept these arguments (names chosen for consistency with `tidymodels`):
 
 * object: The model itself
-* nsim: The number of simulated series (note: this differs from forecast's usage which is the length of the series)
+* new_data: The data used for simulation
+* times: The number of simulated series
 * seed: Random generator initialisation
 
-Additionally, it is recommended that model simulations for fable also accept a `tsibble` containing `new_data`. This dataset extends existing `simulate` functionality by allowing the simulation to accept a new time index for simulating beyond the sample (`.idx`), a set of pre-generated innovations (`.innov`), and a new set of exogenous regressors (say `x1` and `x2`). For repeated simulations, the tsibble is keyed by the repitition number (`.rep`).
+The `new_data` dataset extends existing `stats::simulate` functionality by allowing the simulation to accept a new time index for simulating beyond the sample (`.idx`), and allows the simulation to work with a new set of exogenous regressors (say `x1` and `x2`). 
+
+It is expected that the innovations (`.innov`) for the simulation are randomly generated for each repition number (`rep`), which can be achieved using the `times` argument.  However, users should also be able to provide a set of pre-generated innovations (`.innov`) for each repition (`.rep`). If these columns are provided in the `new_data`, then this data will be passed directly to the simulation method (without generating new numbers over `times` replications).
+
+To ensure consistency between simulation methods, `fablelite` tools prepare this data so that the `simulate` method for a model can expect to receive `new_data` in this format:
 
 ```{r sim-newdata, echo=FALSE}
 library(tsibble)
@@ -43,6 +48,26 @@ tsibble(
   .innov = rnorm(9),
   x1 = rnorm(9, 2, 2), x2 = rnorm(9,-2), 
   index = .idx, key = id(.rep))
+```
+
+For the end user, creating simulations would work like this:
+```{r sim-example, eval=FALSE}
+library(fable)
+library(tsibbledata)
+UKLungDeaths %>% 
+  LM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
+  simulate(UKLungDeaths, times = 5)
+```
+
+Or, if they wanted to simulate beyond the sample:
+```{r, eval = FALSE}
+UKLungDeaths %>% 
+  filter(year(index) <= 1978) %>% 
+  LM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
+  simulate(
+    UKLungDeaths %>% filter(year(index) > 1978),
+    times = 5
+  )
 ```
 
 
