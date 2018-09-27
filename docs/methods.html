@@ -230,20 +230,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>The <code>new_data</code> dataset extends existing <code>stats::simulate</code> functionality by allowing the simulation to accept a new time index for simulating beyond the sample (<code>.idx</code>), and allows the simulation to work with a new set of exogenous regressors (say <code>x1</code> and <code>x2</code>).</p>
 <p>It is expected that the innovations (<code>.innov</code>) for the simulation are randomly generated for each repition number (<code>rep</code>), which can be achieved using the <code>times</code> argument. However, users should also be able to provide a set of pre-generated innovations (<code>.innov</code>) for each repition (<code>.rep</code>). If these columns are provided in the <code>new_data</code>, then this data will be passed directly to the simulation method (without generating new numbers over <code>times</code> replications).</p>
-<p>To ensure consistency between simulation methods, <code>fablelite</code> tools prepare this data so that the <code>simulate</code> method for a model can expect to receive <code>new_data</code> in this format:</p>
 <pre><code>## # A tsibble: 9 x 5 [1M]
 ## # Key:       .rep [3]
-##    .rep     .idx   .innov     x1     x2
-##   &lt;int&gt;    &lt;mth&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1     1 2017 Jan  1.32     5.45  -3.65 
-## 2     1 2017 Feb -0.529   -0.311 -3.02 
-## 3     1 2017 Mar  0.914    2.98  -1.62 
-## 4     2 2017 Jan -1.29     4.97  -0.705
-## 5     2 2017 Feb  0.860    4.86  -0.376
-## 6     2 2017 Mar  0.00726  0.822 -1.47 
-## 7     3 2017 Jan  0.0362  -0.676 -1.66 
-## 8     3 2017 Feb -0.172    2.54  -1.51 
-## 9     3 2017 Mar -0.0185   3.21  -2.92</code></pre>
+##    .rep     .idx .innov     x1    x2
+##   &lt;int&gt;    &lt;mth&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1     1 2017 Jan  0.254 -0.754 -2.67
+## 2     1 2017 Feb  0.617  1.64  -2.60
+## 3     1 2017 Mar -1.52   2.75  -2.34
+## 4     2 2017 Jan  0.429  1.87  -3.06
+## 5     2 2017 Feb -0.348 -0.386 -2.47
+## 6     2 2017 Mar -0.393  1.56  -2.30
+## 7     3 2017 Jan  0.299  2.67  -3.01
+## 8     3 2017 Feb -0.204  3.91  -2.07
+## 9     3 2017 Mar -0.318  2.58  -2.91</code></pre>
 <p>For the end user, creating simulations would work like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(fable)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(tsibbledata)</a>

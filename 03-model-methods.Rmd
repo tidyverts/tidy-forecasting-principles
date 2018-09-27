@@ -38,8 +38,6 @@ The `new_data` dataset extends existing `stats::simulate` functionality by allow
 
 It is expected that the innovations (`.innov`) for the simulation are randomly generated for each repition number (`rep`), which can be achieved using the `times` argument.  However, users should also be able to provide a set of pre-generated innovations (`.innov`) for each repition (`.rep`). If these columns are provided in the `new_data`, then this data will be passed directly to the simulation method (without generating new numbers over `times` replications).
 
-To ensure consistency between simulation methods, `fablelite` tools prepare this data so that the `simulate` method for a model can expect to receive `new_data` in this format:
-
 ```{r sim-newdata, echo=FALSE}
 library(tsibble)
 tsibble(
@@ -51,6 +49,7 @@ tsibble(
 ```
 
 For the end user, creating simulations would work like this:
+
 ```{r sim-example, eval=FALSE}
 library(fable)
 library(tsibbledata)
@@ -60,6 +59,7 @@ UKLungDeaths %>%
 ```
 
 Or, if they wanted to simulate beyond the sample:
+
 ```{r, eval = FALSE}
 UKLungDeaths %>% 
   filter(year(index) <= 1978) %>% 
@@ -69,7 +69,5 @@ UKLungDeaths %>%
     times = 5
   )
 ```
-
-
 
 ## Visualisation
