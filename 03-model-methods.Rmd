@@ -25,4 +25,26 @@ https://github.com/tidyverts/fable/issues/43
 
 ## Simulation
 
+Simulations for time series differ in that it is also reasonable to simulate future paths from the model.
+
+For consistency with `stats::simulate()`, the simulate method for a fable model should accept these arguments:
+
+* object: The model itself
+* nsim: The number of simulated series (note: this differs from forecast's usage which is the length of the series)
+* seed: Random generator initialisation
+
+Additionally, it is recommended that model simulations for fable also accept a `tsibble` containing `new_data`. This dataset extends existing `simulate` functionality by allowing the simulation to accept a new time index for simulating beyond the sample (`.idx`), a set of pre-generated innovations (`.innov`), and a new set of exogenous regressors (say `x1` and `x2`). For repeated simulations, the tsibble is keyed by the repitition number (`.rep`).
+
+```{r sim-newdata, echo=FALSE}
+library(tsibble)
+tsibble(
+  .rep = rep(1:3, each = 3),
+  .idx = rep(yearmonth("2017") + lubridate::month(0:2), 3),
+  .innov = rnorm(9),
+  x1 = rnorm(9, 2, 2), x2 = rnorm(9,-2), 
+  index = .idx, key = id(.rep))
+```
+
+
+
 ## Visualisation
