@@ -32,7 +32,7 @@ The simulate method for a fable model should accept these arguments (names chose
 * object: The model itself
 * new_data: The data used for simulation
 * times: The number of simulated series
-* seed: Random generator initialisation
+* ~~seed~~: Random generator initialisation (handled by fablelite)
 
 The `new_data` dataset extends existing `stats::simulate` functionality by allowing the simulation to accept a new time index for simulating beyond the sample (`.idx`), and allows the simulation to work with a new set of exogenous regressors (say `x1` and `x2`). 
 
@@ -50,7 +50,7 @@ tsibble(
 
 For the end user, creating simulations would work like this:
 
-```{r sim-example, eval=FALSE}
+```{r sim-example, eval = FALSE}
 library(fable)
 library(tsibbledata)
 UKLungDeaths %>% 
@@ -58,9 +58,23 @@ UKLungDeaths %>%
   simulate(UKLungDeaths, times = 5)
 ```
 
+```{r sim-example-eval, echo = FALSE}
+sim1 <- UKLungDeaths %>% 
+  LM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
+  simulate(UKLungDeaths, times = 5)
+sim1
+library(ggplot2)
+ggplot(UKLungDeaths, aes(x = index, y = mdeaths)) + 
+  geom_line(colour = "blue") + 
+  geom_line(aes(y = .sim, group = .rep), data = sim1, alpha = 0.2) + 
+  theme_minimal()
+```
+
+
 Or, if they wanted to simulate beyond the sample:
 
-```{r, eval = FALSE}
+```{r sim-future, eval = FALSE}
+library(lubridate)
 UKLungDeaths %>% 
   filter(year(index) <= 1978) %>% 
   LM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
@@ -69,5 +83,24 @@ UKLungDeaths %>%
     times = 5
   )
 ```
+```{r sim-future-eval, echo=FALSE}
+library(lubridate)
+sim2 <- UKLungDeaths %>% 
+  filter(year(index) <= 1978) %>% 
+  LM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
+  simulate(
+    UKLungDeaths %>% filter(year(index) > 1978),
+    times = 5
+  )
+sim2
+library(ggplot2)
+UKLungDeaths %>% 
+  filter(year(index) <= 1978) %>% 
+  ggplot(aes(x = index, y = mdeaths)) + 
+  geom_line(colour = "blue") + 
+  geom_line(aes(y = .sim, group = .rep), data = sim2, alpha = 0.2) + 
+  theme_minimal()
+```
+
 
 ## Visualisation
