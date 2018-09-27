@@ -25,7 +25,7 @@ https://github.com/tidyverts/fable/issues/43
 
 ## Simulation
 
-Much like the `tidymodels` option toward `predict`, `simulate` should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.
+Much like the [tidymodels opinion](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) toward `predict`, `simulate` should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.
 
 The simulate method for a fable model should accept these arguments (names chosen for consistency with `tidymodels`):
 
