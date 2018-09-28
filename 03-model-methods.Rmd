@@ -31,7 +31,7 @@ The simulate method for a fable model should accept these arguments (names chose
 
 * object: The model itself
 * new_data: The data used for simulation
-* times: The number of simulated series
+* ~~times~~: The number of simulated series (handled by fablelite)
 * ~~seed~~: Random generator initialisation (handled by fablelite)
 
 The `new_data` dataset extends existing `stats::simulate` functionality by allowing the simulation to accept a new time index for simulating beyond the sample (`.idx`), and allows the simulation to work with a new set of exogenous regressors (say `x1` and `x2`). 
