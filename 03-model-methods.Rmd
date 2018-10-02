@@ -19,9 +19,26 @@ interpolate()
 https://github.com/tidyverts/fable/issues/43
 
 ### refit()
-https://github.com/tidyverts/fable/issues/43
+The refitting a model allows the same model to be applied to a new dataset. This is similar to the `model` argument available in most modelling functions from the [forecast package](https://github.com/robjhyndman/forecast/).
+
+Suppose we are using an ETS model to estimate the `mdeaths` series:
+```{r}
+mdeaths_ets <- as_tsibble(mdeaths) %>% 
+  ETS(value)
+```
+```{r, echo = FALSE}
+mdeaths_ets
+```
+
+
+We may be interested in using the same model with the same coefficients to estimate the `fdeaths` series:
+```{r}
+refit(mdeaths_ets, as_tsibble(fdeaths))
+```
+
 
 ### stream()
+Streaming data into a model allows a model to be extended to accomodate new, future data.
 
 ## Simulation
 
@@ -59,6 +76,8 @@ UKLungDeaths %>%
 ```
 
 ```{r sim-example-eval, echo = FALSE}
+library(fable)
+library(tsibbledata)
 sim1 <- UKLungDeaths %>% 
   LM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
   simulate(UKLungDeaths, times = 5)
