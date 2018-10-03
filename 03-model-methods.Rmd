@@ -21,24 +21,73 @@ https://github.com/tidyverts/fable/issues/43
 ### refit()
 The refitting a model allows the same model to be applied to a new dataset. This is similar to the `model` argument available in most modelling functions from the [forecast package](https://github.com/robjhyndman/forecast/).
 
+The refitted model should maintain the same structure and coefficients of the original model, with fitted information updated to reflect the model's behaviour on the new dataset. It should also be possible to allow re-estimation of parameters using the `reestimate` argument, which keeps the selected model terms but updates the model coefficients/parameters.
+
+It is expected that a refit method uses a fitted model and replacement data to return a mable.
+
 Suppose we are using an ETS model to estimate the `mdeaths` series:
-```{r}
+```{r ets-mdeaths}
+library(fable)
 mdeaths_ets <- as_tsibble(mdeaths) %>% 
   ETS(value)
 ```
-```{r, echo = FALSE}
-mdeaths_ets
-```
-
 
 We may be interested in using the same model with the same coefficients to estimate the `fdeaths` series:
-```{r}
+```{r ets-refit}
 refit(mdeaths_ets, as_tsibble(fdeaths))
 ```
 
 
 ### stream()
-Streaming data into a model allows a model to be extended to accomodate new, future data.
+
+Streaming data into a model allows a model to be extended to accomodate new, future data. Like `refit`, `stream` should allow re-estimation of the model parameters. As this can be a costly operation for some models, in most cases updating the parameters should not occur. However it is recommended that the model parameters are updated on a regular basis.
+
+Suppose we are estimating electricity demand data (`tsibbledata::elecdemand`), and after fitting a model to the existing data, a new set of data from the next month becomes available.
+
+```{r stream-tsplot, echo = FALSE}
+library(fasster)
+elec_tr <- tsibbledata::elecdemand %>% 
+  filter(index < ymd("2014-12-01"), index >= ymd("2014-09-01"))
+elec_stream <- tsibbledata::elecdemand %>% 
+  filter(index >= ymd("2014-12-01"))
+ggplot(NULL, aes(x = index, y = Demand)) + 
+  geom_line(aes(colour = "Existing (elec_tr)"), data = elec_tr) + 
+  geom_line(aes(colour = "New (elec_stream)"), data = elec_stream) + 
+  theme_minimal() + 
+  scale_color_brewer(palette = "Dark2") + 
+  guides(colour = guide_legend(NULL, direction = "horizontal")) + 
+  theme(legend.position="bottom")
+```
+
+A (minimal) model for the electricity demand above can be estimated using [fasster](https://github.com/tidyverts/fasster).
+
+```{r stream-fit}
+fit <- elec_tr %>% 
+  fasster(Demand ~ WorkDay %S% (poly(1) + trig(10)))
+```
+```{r stream-fit-plot, echo = FALSE}
+ggplot(NULL, aes(x = index, y = Demand)) + 
+  geom_line(data = elec_tr %>% mutate(facet = "Actual")) +
+  geom_line(aes(y = fitted), data = fitted(fit) %>% mutate(facet = "Fitted")) + 
+  facet_grid(facet ~ .) +
+  theme_minimal()
+```
+
+To extend these fitted values to include December's electricity data, we can use the `stream` functionality:
+
+```{r stream}
+fit <- fit %>% 
+  stream(elec_stream)
+```
+```{r stream-plot, echo = FALSE}
+ggplot(NULL, aes(x = index, y = Demand)) + 
+  geom_line(data = elec_tr %>% mutate(facet = "Actual")) +
+  geom_line(data = elec_stream %>% mutate(facet = "Actual")) +
+  geom_line(aes(y = fitted), data = fitted(fit) %>% mutate(facet = "Fitted")) + 
+  facet_grid(facet ~ .) +
+  theme_minimal()
+```
+
 
 ## Simulation
 
