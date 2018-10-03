@@ -205,7 +205,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="interpolation" class="section level2">
 <h2><span class="header-section-number">5.4</span> Interpolation</h2>
-<p>interpolate()</p>
+<p>Models that can be estimated in the presence of missing values can often be used to interpolate the unknown values. Often interpolated values can be taken from model’s fitted values, and some models may support more sophisticated interpolation methods.</p>
+<p>The <a href="https://github.com/robjhyndman/forecast/">forecast package</a> provides the <code>na.interp</code> function for interpolating time series data, which uses linear interpolation for non-seasonal data, and STL decomposition for seasonal data.</p>
+<p>Tidy time series tools should allow users to interpolate missing values using any appropriate model.</p>
+<p>For example, the <code>fpp2::mens400</code> dataset contains Olympic men’s 400m track final winning times. The winning times for the 1916, 1940 and 1944 Olympics are missing from the dataset.</p>
+<p><img src="tidy-forecasting_files/figure-html/mens400-1.png" width="672" /></p>
+<p>We could then interpolate these missing values using the fitted values from a linear model with a trend:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">as_tsibble</span>(fpp2<span class="op">::</span>mens400) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">  </span><span class="kw">LM</span>(value <span class="op">~</span><span class="st"> </span><span class="kw">trend</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">interpolate</span>()</a></code></pre></div>
+<pre><code>## # A tsibble: 31 x 2 [?]
+##    index               value
+##    &lt;dttm&gt;              &lt;dbl&gt;
+##  1 1896-01-01 00:00:00  54.2
+##  2 1900-01-01 00:00:00  49.4
+##  3 1904-01-01 00:00:00  49.2
+##  4 1908-01-01 00:00:00  50  
+##  5 1912-01-01 00:00:00  48.2
+##  6 1916-01-01 00:00:00  48.8
+##  7 1920-01-01 00:00:00  49.6
+##  8 1924-01-01 00:00:00  47.6
+##  9 1928-01-01 00:00:00  47.8
+## 10 1932-01-01 00:00:00  46.2
+## # ... with 21 more rows</code></pre>
+<p><img src="tidy-forecasting_files/figure-html/mens400-interpolated-display-1.png" width="672" /></p>
 </div>
 <div id="re-estimation" class="section level2">
 <h2><span class="header-section-number">5.5</span> Re-estimation</h2>
@@ -216,11 +239,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The refitted model should maintain the same structure and coefficients of the original model, with fitted information updated to reflect the model’s behaviour on the new dataset. It should also be possible to allow re-estimation of parameters using the <code>reestimate</code> argument, which keeps the selected model terms but updates the model coefficients/parameters.</p>
 <p>It is expected that a refit method uses a fitted model and replacement data to return a mable.</p>
 <p>Suppose we are using an ETS model to estimate the <code>mdeaths</code> series:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(fable)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">mdeaths_ets &lt;-<span class="st"> </span><span class="kw">as_tsibble</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">ETS</span>(value)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(fable)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">mdeaths_ets &lt;-<span class="st"> </span><span class="kw">as_tsibble</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw">ETS</span>(value)</a></code></pre></div>
 <p>We may be interested in using the same model with the same coefficients to estimate the <code>fdeaths</code> series:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">refit</span>(mdeaths_ets, <span class="kw">as_tsibble</span>(fdeaths))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">refit</span>(mdeaths_ets, <span class="kw">as_tsibble</span>(fdeaths))</a></code></pre></div>
 <pre><code>## # A mable: 1 model [1M]
 ##   data               model     
 ##   &lt;list&gt;             &lt;model&gt;   
@@ -232,12 +255,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Suppose we are estimating electricity demand data (<code>tsibbledata::elecdemand</code>), and after fitting a model to the existing data, a new set of data from the next month becomes available.</p>
 <p><img src="tidy-forecasting_files/figure-html/stream-tsplot-1.png" width="672" /></p>
 <p>A (minimal) model for the electricity demand above can be estimated using <a href="https://github.com/tidyverts/fasster">fasster</a>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fit &lt;-<span class="st"> </span>elec_tr <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">fasster</span>(Demand <span class="op">~</span><span class="st"> </span>WorkDay <span class="op">%S%</span><span class="st"> </span>(<span class="kw">poly</span>(<span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">trig</span>(<span class="dv">10</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">fit &lt;-<span class="st"> </span>elec_tr <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">fasster</span>(Demand <span class="op">~</span><span class="st"> </span>WorkDay <span class="op">%S%</span><span class="st"> </span>(<span class="kw">poly</span>(<span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">trig</span>(<span class="dv">10</span>)))</a></code></pre></div>
 <p><img src="tidy-forecasting_files/figure-html/stream-fit-plot-1.png" width="672" /></p>
 <p>To extend these fitted values to include December’s electricity data, we can use the <code>stream</code> functionality:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">fit &lt;-<span class="st"> </span>fit <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">stream</span>(elec_stream)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">fit &lt;-<span class="st"> </span>fit <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">stream</span>(elec_stream)</a></code></pre></div>
 <p><img src="tidy-forecasting_files/figure-html/stream-plot-1.png" width="672" /></p>
 </div>
 </div>
@@ -255,62 +278,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>It is expected that the innovations (<code>.innov</code>) for the simulation are randomly generated for each repition number (<code>rep</code>), which can be achieved using the <code>times</code> argument. However, users should also be able to provide a set of pre-generated innovations (<code>.innov</code>) for each repition (<code>.rep</code>). If these columns are provided in the <code>new_data</code>, then this data will be passed directly to the simulation method (without generating new numbers over <code>times</code> replications).</p>
 <pre><code>## # A tsibble: 9 x 5 [1M]
 ## # Key:       .rep [3]
-##    .rep     .idx  .innov     x1     x2
-##   &lt;int&gt;    &lt;mth&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1     1 2017 Jan  0.127   1.80  -2.09 
-## 2     1 2017 Feb  1.08   -1.26  -2.97 
-## 3     1 2017 Mar -1.60    3.79  -0.824
-## 4     2 2017 Jan -1.73    1.05  -2.11 
-## 5     2 2017 Feb  0.887   0.445 -1.35 
-## 6     2 2017 Mar  0.184   5.97  -3.75 
-## 7     3 2017 Jan -1.35    2.95  -2.74 
-## 8     3 2017 Feb  0.225   1.84  -0.935
-## 9     3 2017 Mar  0.0661  2.30  -2.16</code></pre>
+##    .rep     .idx   .innov    x1     x2
+##   &lt;int&gt;    &lt;mth&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1     1 2017 Jan -0.834   1.84  -2.07 
+## 2     1 2017 Feb  0.257   4.28  -2.46 
+## 3     1 2017 Mar -0.231   5.07  -1.09 
+## 4     2 2017 Jan -1.15    0.947 -2.97 
+## 5     2 2017 Feb  0.148   3.80  -1.56 
+## 6     2 2017 Mar  0.714   3.71  -1.36 
+## 7     3 2017 Jan -0.00150 1.65  -0.899
+## 8     3 2017 Feb  0.986   4.33  -1.74 
+## 9     3 2017 Mar -1.18    3.67  -3.22</code></pre>
 <p>For the end user, creating simulations would work like this:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(fable)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">library</span>(tsibbledata)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">  </span><span class="kw">LM</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">fourier</span>(<span class="st">&quot;year&quot;</span>, <span class="dt">K =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span>fdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw">simulate</span>(UKLungDeaths, <span class="dt">times =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">library</span>(fable)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">library</span>(tsibbledata)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw">LM</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">fourier</span>(<span class="st">&quot;year&quot;</span>, <span class="dt">K =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span>fdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="kw">simulate</span>(UKLungDeaths, <span class="dt">times =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## # A tsibble: 360 x 3 [1M]
 ## # Key:       .rep [5]
 ##       index  .rep  .sim
 ##       &lt;mth&gt; &lt;int&gt; &lt;dbl&gt;
-##  1 1974 Jan     1 2267.
-##  2 1974 Feb     1 1710.
-##  3 1974 Mar     1 2077.
-##  4 1974 Apr     1 1730.
-##  5 1974 May     1 1482.
-##  6 1974 Jun     1 1013.
-##  7 1974 Jul     1 1211.
-##  8 1974 Aug     1 1104.
-##  9 1974 Sep     1 1161.
-## 10 1974 Oct     1 1682.
+##  1 1974 Jan     1 2296.
+##  2 1974 Feb     1 1752.
+##  3 1974 Mar     1 1960.
+##  4 1974 Apr     1 1775.
+##  5 1974 May     1 1491.
+##  6 1974 Jun     1 1381.
+##  7 1974 Jul     1 1172.
+##  8 1974 Aug     1 1204.
+##  9 1974 Sep     1  953.
+## 10 1974 Oct     1 1470.
 ## # ... with 350 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/sim-example-eval-1.png" width="672" /></p>
 <p>Or, if they wanted to simulate beyond the sample:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">year</span>(index) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1978</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw">LM</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">fourier</span>(<span class="st">&quot;year&quot;</span>, <span class="dt">K =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span>fdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="kw">simulate</span>(</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">    UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">year</span>(index) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1978</span>),</a>
-<a class="sourceLine" id="cb9-7" data-line-number="7">    <span class="dt">times =</span> <span class="dv">5</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8">  )</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">year</span>(index) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1978</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">LM</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">fourier</span>(<span class="st">&quot;year&quot;</span>, <span class="dt">K =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span>fdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="st">  </span><span class="kw">simulate</span>(</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">    UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">year</span>(index) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1978</span>),</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">    <span class="dt">times =</span> <span class="dv">5</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8">  )</a></code></pre></div>
 <pre><code>## # A tsibble: 60 x 3 [1M]
 ## # Key:       .rep [5]
 ##       index  .rep  .sim
 ##       &lt;mth&gt; &lt;int&gt; &lt;dbl&gt;
-##  1 1979 Jan     1 2007.
-##  2 1979 Feb     1 1973.
-##  3 1979 Mar     1 2036.
-##  4 1979 Apr     1 1640.
-##  5 1979 May     1 1455.
-##  6 1979 Jun     1 1148.
-##  7 1979 Jul     1 1339.
-##  8 1979 Aug     1 1089.
-##  9 1979 Sep     1 1150.
-## 10 1979 Oct     1 1156.
+##  1 1979 Jan     1 2152.
+##  2 1979 Feb     1 1939.
+##  3 1979 Mar     1 1793.
+##  4 1979 Apr     1 1683.
+##  5 1979 May     1 1226.
+##  6 1979 Jun     1 1150.
+##  7 1979 Jul     1 1288.
+##  8 1979 Aug     1  971.
+##  9 1979 Sep     1 1119.
+## 10 1979 Oct     1 1132.
 ## # ... with 50 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/sim-future-eval-1.png" width="672" /></p>
 </div>

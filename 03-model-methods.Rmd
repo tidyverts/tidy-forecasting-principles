@@ -13,7 +13,44 @@ components()
 
 ## Interpolation
 
-interpolate()
+Models that can be estimated in the presence of missing values can often be used to interpolate the unknown values. Often interpolated values can be taken from model's fitted values, and some models may support more sophisticated interpolation methods.
+
+The [forecast package](https://github.com/robjhyndman/forecast/) provides the `na.interp` function for interpolating time series data, which uses linear interpolation for non-seasonal data, and STL decomposition for seasonal data. 
+
+Tidy time series tools should allow users to interpolate missing values using any appropriate model. 
+
+For example, the `fpp2::mens400` dataset contains Olympic men's 400m track final winning times. The winning times for the 1916, 1940 and 1944 Olympics are missing from the dataset.
+
+```{r mens400, echo = FALSE}
+as_tsibble(fpp2::mens400) %>% 
+  ggplot(aes(x = index, y = value)) + 
+  geom_line() + 
+  theme_minimal()
+```
+
+We could then interpolate these missing values using the fitted values from a linear model with a trend:
+
+```{r mens400-interpolated, eval = FALSE}
+as_tsibble(fpp2::mens400) %>% 
+  LM(value ~ trend()) %>% 
+  interpolate()
+```
+```{r mens400-interpolated-display, echo = FALSE}
+mens400_complete <- as_tsibble(fpp2::mens400) %>% 
+  LM(value ~ trend()) %>% 
+  interpolate()
+mens400_complete
+
+mens400_complete %>% 
+  ggplot(aes(x = index, y = value)) + 
+  geom_line(aes(colour = "Interpolated")) + 
+  geom_line(aes(colour = "Actual"), data = as_tsibble(fpp2::mens400)) + 
+  theme_minimal() + 
+  scale_color_brewer(palette = "Dark2") + 
+  guides(colour = guide_legend(NULL, direction = "horizontal")) + 
+  theme(legend.position="bottom")
+```
+
 
 ## Re-estimation
 https://github.com/tidyverts/fable/issues/43
