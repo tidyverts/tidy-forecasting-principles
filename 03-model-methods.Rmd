@@ -98,7 +98,7 @@ ggplot(NULL, aes(x = index, y = Demand)) +
 
 A (minimal) model for the electricity demand above can be estimated using [fasster](https://github.com/tidyverts/fasster).
 
-```{r stream-fit}
+```{r stream-fit, cache=TRUE}
 fit <- elec_tr %>% 
   fasster(Demand ~ WorkDay %S% (poly(1) + trig(10)))
 ```
@@ -153,7 +153,7 @@ tsibble(
 
 For the end user, creating simulations would work like this:
 
-```{r sim-example, eval = FALSE}
+```{r sim-example, eval = FALSE, cache = TRUE}
 library(fable)
 library(tsibbledata)
 UKLungDeaths %>% 
@@ -161,7 +161,7 @@ UKLungDeaths %>%
   simulate(UKLungDeaths, times = 5)
 ```
 
-```{r sim-example-eval, echo = FALSE}
+```{r sim-example-eval, echo = FALSE, cache = TRUE}
 library(fable)
 library(tsibbledata)
 sim1 <- UKLungDeaths %>% 
@@ -209,3 +209,7 @@ UKLungDeaths %>%
 
 
 ## Visualisation
+
+Different plots are appropriate for visualising each type of model. For example, a plot of an ARIMA model may show the AR and/or MA roots from the model on a unit circle. A linear model has several common plots, including plots showing "Residuals vs Fitted" values, normality via a Q-Q plot, and measures of leverage. These model plots are further extended by the [visreg package](http://pbreheny.github.io/visreg/) to show the affects of terms on the model's response. Some models currently have no model-specific plots, such as ETS, which defaults to showing a components plot using the estimated states.
+
+Visualising these models poses a substantial challenge for consistency across models, and is made more difficult as batch modelling becomes commonplace.

@@ -278,17 +278,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>It is expected that the innovations (<code>.innov</code>) for the simulation are randomly generated for each repition number (<code>rep</code>), which can be achieved using the <code>times</code> argument. However, users should also be able to provide a set of pre-generated innovations (<code>.innov</code>) for each repition (<code>.rep</code>). If these columns are provided in the <code>new_data</code>, then this data will be passed directly to the simulation method (without generating new numbers over <code>times</code> replications).</p>
 <pre><code>## # A tsibble: 9 x 5 [1M]
 ## # Key:       .rep [3]
-##    .rep     .idx   .innov    x1     x2
-##   &lt;int&gt;    &lt;mth&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-## 1     1 2017 Jan -0.834   1.84  -2.07 
-## 2     1 2017 Feb  0.257   4.28  -2.46 
-## 3     1 2017 Mar -0.231   5.07  -1.09 
-## 4     2 2017 Jan -1.15    0.947 -2.97 
-## 5     2 2017 Feb  0.148   3.80  -1.56 
-## 6     2 2017 Mar  0.714   3.71  -1.36 
-## 7     3 2017 Jan -0.00150 1.65  -0.899
-## 8     3 2017 Feb  0.986   4.33  -1.74 
-## 9     3 2017 Mar -1.18    3.67  -3.22</code></pre>
+##    .rep     .idx .innov     x1    x2
+##   &lt;int&gt;    &lt;mth&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1     1 2017 Jan  1.69   1.04  -2.36
+## 2     1 2017 Feb  1.20   0.457 -3.23
+## 3     1 2017 Mar -0.627  3.35  -2.18
+## 4     2 2017 Jan  1.35  -1.00  -2.27
+## 5     2 2017 Feb -1.27  -1.25  -2.86
+## 6     2 2017 Mar -1.04   4.60  -2.67
+## 7     3 2017 Jan  3.12   1.48  -2.24
+## 8     3 2017 Feb -1.44   3.12  -3.38
+## 9     3 2017 Mar -0.870  1.08  -4.89</code></pre>
 <p>For the end user, creating simulations would work like this:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">library</span>(fable)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">library</span>(tsibbledata)</a>
@@ -299,16 +299,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # Key:       .rep [5]
 ##       index  .rep  .sim
 ##       &lt;mth&gt; &lt;int&gt; &lt;dbl&gt;
-##  1 1974 Jan     1 2296.
-##  2 1974 Feb     1 1752.
-##  3 1974 Mar     1 1960.
-##  4 1974 Apr     1 1775.
-##  5 1974 May     1 1491.
-##  6 1974 Jun     1 1381.
-##  7 1974 Jul     1 1172.
-##  8 1974 Aug     1 1204.
-##  9 1974 Sep     1  953.
-## 10 1974 Oct     1 1470.
+##  1 1974 Jan     1 2248.
+##  2 1974 Feb     1 1666.
+##  3 1974 Mar     1 2218.
+##  4 1974 Apr     1 1872.
+##  5 1974 May     1 1273.
+##  6 1974 Jun     1 1078.
+##  7 1974 Jul     1 1340.
+##  8 1974 Aug     1 1073.
+##  9 1974 Sep     1 1152.
+## 10 1974 Oct     1 1573.
 ## # ... with 350 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/sim-example-eval-1.png" width="672" /></p>
 <p>Or, if they wanted to simulate beyond the sample:</p>
@@ -324,21 +324,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # Key:       .rep [5]
 ##       index  .rep  .sim
 ##       &lt;mth&gt; &lt;int&gt; &lt;dbl&gt;
-##  1 1979 Jan     1 2152.
-##  2 1979 Feb     1 1939.
-##  3 1979 Mar     1 1793.
-##  4 1979 Apr     1 1683.
-##  5 1979 May     1 1226.
-##  6 1979 Jun     1 1150.
-##  7 1979 Jul     1 1288.
-##  8 1979 Aug     1  971.
-##  9 1979 Sep     1 1119.
-## 10 1979 Oct     1 1132.
+##  1 1979 Jan     1 2122.
+##  2 1979 Feb     1 2068.
+##  3 1979 Mar     1 1883.
+##  4 1979 Apr     1 1621.
+##  5 1979 May     1 1257.
+##  6 1979 Jun     1 1225.
+##  7 1979 Jul     1 1229.
+##  8 1979 Aug     1 1055.
+##  9 1979 Sep     1 1026.
+## 10 1979 Oct     1 1137.
 ## # ... with 50 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/sim-future-eval-1.png" width="672" /></p>
 </div>
 <div id="visualisation" class="section level2">
 <h2><span class="header-section-number">5.7</span> Visualisation</h2>
+<p>Different plots are appropriate for visualising each type of model. For example, a plot of an ARIMA model may show the AR and/or MA roots from the model on a unit circle. A linear model has several common plots, including plots showing “Residuals vs Fitted” values, normality via a Q-Q plot, and measures of leverage. These model plots are further extended by the <a href="http://pbreheny.github.io/visreg/">visreg package</a> to show the affects of terms on the model’s response. Some models currently have no model-specific plots, such as ETS, which defaults to showing a components plot using the estimated states.</p>
+<p>Visualising these models poses a substantial challenge for consistency across models, and is made more difficult as batch modelling becomes commonplace.</p>
 
 </div>
 </div>
