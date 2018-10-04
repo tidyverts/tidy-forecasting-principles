@@ -1,5 +1,5 @@
 --- 
-title: "Ideas for tidy time series forecasting"
+title: "Tidy time series forecasting with fable"
 author: "Mitchell O'Hara-Wild"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
