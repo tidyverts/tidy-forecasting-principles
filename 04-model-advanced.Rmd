@@ -17,6 +17,7 @@ UKLungDeaths %>%
 https://github.com/tidyverts/fable/wiki/Combining-models
 
 ## Ensemble
+https://github.com/tidyverts/fable/issues/34
 
 ## Boosting
 
