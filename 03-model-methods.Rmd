@@ -17,7 +17,7 @@ UKLungDeaths %>%
   ETS(mdeaths) %>% 
   components
 ```
-```{r components-display}
+```{r components-display, echo = FALSE}
 mdeaths_components <- UKLungDeaths %>% 
   ETS(mdeaths) %>% 
   components
