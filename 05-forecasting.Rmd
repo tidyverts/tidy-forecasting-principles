@@ -2,6 +2,21 @@
 
 ## The fable object
 
+```{r forecast, eval = FALSE}
+UKLungDeaths %>% 
+  ETS(mdeaths) %>% 
+  forecast()
+```
+
+```{r forecast-display, echo = FALSE}
+ets_fc <- ets_fit %>% 
+  forecast()
+ets_fc
+ets_fc %>% 
+  autoplot()
+```
+
+
 * Index
 * Mean (backtransformed and bias adjusted)
 * Standard error (may not be needed)

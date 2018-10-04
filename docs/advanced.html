@@ -195,9 +195,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">6.1</span> Batch</h2>
 <p><a href="https://github.com/tidyverts/fable/wiki/Tidy-forecasting-with-the-fable-package" class="uri">https://github.com/tidyverts/fable/wiki/Tidy-forecasting-with-the-fable-package</a></p>
 <p>Estimating multiple models is a <strong>key</strong> feature of fable. Most time series can be naturally disaggregated using a series of factors known as keys. These keys are used to uniquely identify separate time series, each of which can be modelled separately.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;deaths&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">ETS</span>(deaths)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;deaths&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="st">  </span><span class="kw">ETS</span>(deaths)</a></code></pre></div>
 <pre><code>## # A mable: 2 models [1M]
 ## # Key:     sex [2]
 ##   sex     data               model     
