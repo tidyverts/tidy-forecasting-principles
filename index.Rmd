@@ -13,3 +13,9 @@ description: "This is an outline of principles used by fable that acts as a guid
 # Background
 
 Collecting these principles in a book-like format is motivated by Max Kuhn's [Conventions for R Modeling Packages](https://tidymodels.github.io/model-implementation-principles/). The ideas presented in this resource are subject to revision, as the development of these tools are still experimental. This text aims to consolidate the information currently dispersed in the `fable` package documentation, wiki pages, issues, and emails in a way that is more accessible to the wider community. Hopefully this firstly helps us better design and plan the workflow of tidy forecasting, and invite external opinions to ensure that `fable` works well with the existing tidy modelling developments.
+
+```{r, echo = FALSE, message=FALSE}
+library(tidyverse)
+library(fable)
+library(tsibbledata)
+```

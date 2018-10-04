@@ -1,7 +1,33 @@
 # Model methods {#methods}
 
 ## Display
-print(), summary()
+
+The `print` and `summary` methods are standard displays for fitted models. The `print` method typically displays a limited amount of key information, such as the model that was fit, and the estimated coefficients. The `summary` function extends the `print` method with a more detailed summary of fit, which may include measures for goodness of fit, and significance of model terms.
+
+As fable naturally supports batch/multiple forecasting, the print method is standardised for any number of models. A very short model specific display can be defined using the `model_sum` generic, which is shown in the mable.
+
+```{r ets-fit, eval = FALSE}
+library(tsibbledata)
+UKLungDeaths %>% 
+  ETS(mdeaths)
+```
+```{r mable-print, echo = FALSE}
+ets_fit <- UKLungDeaths %>% 
+  ETS(mdeaths)
+ets_fit
+```
+
+The summary method can then be used to reveal more information about this model, such as fitted parameters and goodness of fit. Ideally this information would also be standardised into a tabular form for batch modelling, although this is currently not the case.
+```{r ets-summary, eval = FALSE}
+UKLungDeaths %>% 
+  ETS(mdeaths) %>% 
+  summary
+```
+```{r mable-summary, echo = FALSE}
+ets_fit %>% 
+  summary
+```
+
 
 ## Accessibility
 
@@ -18,8 +44,7 @@ UKLungDeaths %>%
   components
 ```
 ```{r components-display, echo = FALSE}
-mdeaths_components <- UKLungDeaths %>% 
-  ETS(mdeaths) %>% 
+mdeaths_components <- ets_fit %>% 
   components
 mdeaths_components
 mdeaths_components %>% 
@@ -84,16 +109,16 @@ The refitted model should maintain the same structure and coefficients of the or
 
 It is expected that a refit method uses a fitted model and replacement data to return a mable.
 
-Suppose we are using an ETS model to estimate the `mdeaths` series:
-```{r ets-mdeaths}
+For the ETS model for `mdeaths` estimated above:
+```{r ets-mdeaths, eval = FALSE}
 library(fable)
-mdeaths_ets <- as_tsibble(mdeaths) %>% 
+ets_fit <- as_tsibble(mdeaths) %>% 
   ETS(value)
 ```
 
 We may be interested in using the same model with the same coefficients to estimate the `fdeaths` series:
 ```{r ets-refit}
-refit(mdeaths_ets, as_tsibble(fdeaths))
+refit(ets_fit, as_tsibble(fdeaths))
 ```
 
 
