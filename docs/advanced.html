@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-10-04">
+<meta name="date" content="2018-10-05">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -194,6 +194,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="batch" class="section level2">
 <h2><span class="header-section-number">6.1</span> Batch</h2>
 <p><a href="https://github.com/tidyverts/fable/wiki/Tidy-forecasting-with-the-fable-package" class="uri">https://github.com/tidyverts/fable/wiki/Tidy-forecasting-with-the-fable-package</a></p>
+<p>Estimating multiple models is a <strong>key</strong> feature of fable. Most time series can be naturally disaggregated using a series of factors known as keys. These keys are used to uniquely identify separate time series, each of which can be modelled separately.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;deaths&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="st">  </span><span class="kw">ETS</span>(deaths)</a></code></pre></div>
+<pre><code>## # A mable: 2 models [1M]
+## # Key:     sex [2]
+##   sex     data               model     
+##   &lt;chr&gt;   &lt;list&gt;             &lt;model&gt;   
+## 1 mdeaths &lt;tsibble [72 × 2]&gt; ETS(M,A,A)
+## 2 fdeaths &lt;tsibble [72 × 2]&gt; ETS(M,N,M)</code></pre>
 </div>
 <div id="decomposition" class="section level2">
 <h2><span class="header-section-number">6.2</span> Decomposition</h2>

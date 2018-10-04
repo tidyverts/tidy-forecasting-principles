@@ -1,7 +1,17 @@
 # Advanced modelling {#advanced}
 
 ## Batch
+
 https://github.com/tidyverts/fable/wiki/Tidy-forecasting-with-the-fable-package
+
+Estimating multiple models is a **key** feature of fable. Most time series can be naturally disaggregated using a series of factors known as keys. These keys are used to uniquely identify separate time series, each of which can be modelled separately.
+
+```{r batch}
+UKLungDeaths %>% 
+  gather("sex", "deaths") %>% 
+  ETS(deaths)
+```
+
 
 ## Decomposition
 https://github.com/tidyverts/fable/wiki/Combining-models
