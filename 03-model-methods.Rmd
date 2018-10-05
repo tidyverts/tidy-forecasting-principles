@@ -56,7 +56,7 @@ mdeaths_components %>%
   ylab(NULL)
 ```
 
-
+It may also be worth storing how these components can be used to produce the response, which can be used for [decomposition modelling](https://mitchelloharawild.github.io/tidy-forecasting-principles/advanced.html#decomposition).
 
 ## Interpolation
 
