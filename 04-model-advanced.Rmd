@@ -16,6 +16,32 @@ UKLungDeaths %>%
 ## Decomposition
 https://github.com/tidyverts/fable/wiki/Combining-models
 
+Objects which support a `components` method can then have their components modelled separately. The working name for this functionality is `model_components`, however a shorter (single word) verb is preferred.
+
+The user should be able to specify how each of the components are modelled, and the `components` method should define how each component is combined (and perhaps some default models that can be used).
+
+```{r decomp}
+library(tsibblestats)
+md_decomp <- UKLungDeaths %>%
+  STL(mdeaths ~ season(window = 12)) %>% 
+  components
+md_decomp
+```
+```{r decomp-plot, echo = FALSE}
+md_decomp %>%
+  gather(component, value) %>% 
+  ggplot(aes(x = index, y = value)) + 
+  geom_line() +
+  facet_grid(component ~ ., scales = "free_y", switch = "y") + 
+  theme_minimal() + 
+  ylab(NULL)
+```
+
+```{r modelcomponents, eval = FALSE}
+md_decomp %>% 
+  model_components(???)
+```
+
 ## Ensemble
 https://github.com/tidyverts/fable/issues/34
 
