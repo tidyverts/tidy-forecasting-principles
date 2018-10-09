@@ -193,9 +193,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">7</span> Forecasting</h1>
 <div id="the-fable-object" class="section level2">
 <h2><span class="header-section-number">7.1</span> The fable object</h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="st">  </span><span class="kw">ETS</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="st">  </span><span class="kw">forecast</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="st">  </span><span class="kw">ETS</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="st">  </span><span class="kw">forecast</span>()</a></code></pre></div>
 <pre><code>## # A fable: 1 forecast [1M]
 ##   data               model      new_data           forecast 
 ##   &lt;list&gt;             &lt;model&gt;    &lt;list&gt;             &lt;fc&gt;     
@@ -261,7 +261,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mitchelloharawild/tidy-forecasting-principles/edit/master/05-forecasting.Rmd",
+"link": "https://github.com/tidyverts/tidy-forecasting-principles/edit/master/05-forecasting.Rmd",
 "text": "Edit"
 },
 "download": ["tidy-forecasting.pdf", "tidy-forecasting.epub"],

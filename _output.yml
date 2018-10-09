@@ -2,7 +2,7 @@ bookdown::gitbook:
   css: style.css
   toc_depth: 2
   config:
-    edit: https://github.com/mitchelloharawild/tidy-forecasting-principles/edit/master/%s
+    edit: https://github.com/tidyverts/tidy-forecasting-principles/edit/master/%s
     download: ["pdf", "epub"]
 bookdown::pdf_book:
   includes:
