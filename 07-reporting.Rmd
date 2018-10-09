@@ -1,6 +1,17 @@
 # Reporting {#report}
 
 ## Model equations
+
+`equation()` displays a mathematical representation of the model that has been used.
+
 https://github.com/tidyverts/fable/issues/4
 
-## Object summaries
+https://github.com/tidymodels/broom/issues/492
+
+(currently not implemented)
+
+## Object reports
+
+`report()` returns a formatted summary of the object suitable for R Markdown documents and shiny applications.
+
+(currently not implemented)

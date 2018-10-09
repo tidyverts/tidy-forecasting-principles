@@ -170,7 +170,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="9" data-path="report.html"><a href="report.html"><i class="fa fa-check"></i><b>9</b> Reporting</a><ul>
 <li class="chapter" data-level="9.1" data-path="report.html"><a href="report.html#model-equations"><i class="fa fa-check"></i><b>9.1</b> Model equations</a></li>
-<li class="chapter" data-level="9.2" data-path="report.html"><a href="report.html#object-summaries"><i class="fa fa-check"></i><b>9.2</b> Object summaries</a></li>
+<li class="chapter" data-level="9.2" data-path="report.html"><a href="report.html#object-reports"><i class="fa fa-check"></i><b>9.2</b> Object reports</a></li>
 </ul></li>
 </ul>
 
@@ -338,17 +338,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>It is expected that the innovations (<code>.innov</code>) for the simulation are randomly generated for each repition number (<code>rep</code>), which can be achieved using the <code>times</code> argument. However, users should also be able to provide a set of pre-generated innovations (<code>.innov</code>) for each repition (<code>.rep</code>). If these columns are provided in the <code>new_data</code>, then this data will be passed directly to the simulation method (without generating new numbers over <code>times</code> replications).</p>
 <pre><code>## # A tsibble: 9 x 5 [1M]
 ## # Key:       .rep [3]
-##    .rep     .idx .innov     x1    x2
-##   &lt;int&gt;    &lt;mth&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1     1 2017 Jan  1.69   1.04  -2.36
-## 2     1 2017 Feb  1.20   0.457 -3.23
-## 3     1 2017 Mar -0.627  3.35  -2.18
-## 4     2 2017 Jan  1.35  -1.00  -2.27
-## 5     2 2017 Feb -1.27  -1.25  -2.86
-## 6     2 2017 Mar -1.04   4.60  -2.67
-## 7     3 2017 Jan  3.12   1.48  -2.24
-## 8     3 2017 Feb -1.44   3.12  -3.38
-## 9     3 2017 Mar -0.870  1.08  -4.89</code></pre>
+##    .rep     .idx .innov      x1    x2
+##   &lt;int&gt;    &lt;mth&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+## 1     1 2017 Jan -1.72   0.0798 -1.97
+## 2     1 2017 Feb  1.61   2.72   -2.19
+## 3     1 2017 Mar -0.625 -0.713  -1.27
+## 4     2 2017 Jan -1.54   3.07   -2.37
+## 5     2 2017 Feb -0.986  3.44   -1.89
+## 6     2 2017 Mar  0.871  0.823  -1.37
+## 7     3 2017 Jan  0.488  7.71   -2.61
+## 8     3 2017 Feb  0.295 -0.392  -1.50
+## 9     3 2017 Mar -0.741  3.36   -2.69</code></pre>
 <p>For the end user, creating simulations would work like this:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">library</span>(fable)</a>
 <a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">library</span>(tsibbledata)</a>
@@ -359,16 +359,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # Key:       .rep [5]
 ##       index  .rep  .sim
 ##       &lt;mth&gt; &lt;int&gt; &lt;dbl&gt;
-##  1 1974 Jan     1 2248.
-##  2 1974 Feb     1 1666.
-##  3 1974 Mar     1 2218.
-##  4 1974 Apr     1 1872.
-##  5 1974 May     1 1273.
-##  6 1974 Jun     1 1078.
-##  7 1974 Jul     1 1340.
-##  8 1974 Aug     1 1073.
-##  9 1974 Sep     1 1152.
-## 10 1974 Oct     1 1573.
+##  1 1974 Jan     1 2303.
+##  2 1974 Feb     1 1762.
+##  3 1974 Mar     1 2144.
+##  4 1974 Apr     1 1744.
+##  5 1974 May     1 1511.
+##  6 1974 Jun     1 1191.
+##  7 1974 Jul     1 1145.
+##  8 1974 Aug     1 1223.
+##  9 1974 Sep     1  941.
+## 10 1974 Oct     1 1530.
 ## # ... with 350 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/sim-example-eval-1.png" width="672" /></p>
 <p>Or, if they wanted to simulate beyond the sample:</p>
@@ -384,16 +384,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # Key:       .rep [5]
 ##       index  .rep  .sim
 ##       &lt;mth&gt; &lt;int&gt; &lt;dbl&gt;
-##  1 1979 Jan     1 2122.
-##  2 1979 Feb     1 2068.
-##  3 1979 Mar     1 1883.
-##  4 1979 Apr     1 1621.
-##  5 1979 May     1 1257.
-##  6 1979 Jun     1 1225.
-##  7 1979 Jul     1 1229.
-##  8 1979 Aug     1 1055.
-##  9 1979 Sep     1 1026.
-## 10 1979 Oct     1 1137.
+##  1 1979 Jan     1 2100.
+##  2 1979 Feb     1 2009.
+##  3 1979 Mar     1 1951.
+##  4 1979 Apr     1 1747.
+##  5 1979 May     1 1289.
+##  6 1979 Jun     1 1322.
+##  7 1979 Jul     1 1059.
+##  8 1979 Aug     1 1082.
+##  9 1979 Sep     1 1265.
+## 10 1979 Oct     1 1029.
 ## # ... with 50 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/sim-future-eval-1.png" width="672" /></p>
 </div>
