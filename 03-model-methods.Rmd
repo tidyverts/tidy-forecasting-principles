@@ -166,7 +166,7 @@ ggplot(UKLungDeaths, aes(x = index, y = mdeaths)) +
 ```
 
 
-Or, if they wanted to simulate beyond the sample:
+Or, to simulate beyond the sample:
 
 ```{r sim-future, eval = FALSE}
 library(lubridate)
