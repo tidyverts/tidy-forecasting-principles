@@ -140,8 +140,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="accessing-model-elements.html"><a href="accessing-model-elements.html"><i class="fa fa-check"></i><b>4</b> Accessing model elements</a><ul>
 <li class="chapter" data-level="4.1" data-path="accessing-model-elements.html"><a href="accessing-model-elements.html#display"><i class="fa fa-check"></i><b>4.1</b> Display</a></li>
-<li class="chapter" data-level="4.2" data-path="accessing-model-elements.html"><a href="accessing-model-elements.html#accessibility"><i class="fa fa-check"></i><b>4.2</b> Accessibility</a></li>
-<li class="chapter" data-level="4.3" data-path="accessing-model-elements.html"><a href="accessing-model-elements.html#components"><i class="fa fa-check"></i><b>4.3</b> Components</a></li>
+<li class="chapter" data-level="4.2" data-path="accessing-model-elements.html"><a href="accessing-model-elements.html#fitted-values-and-residuals"><i class="fa fa-check"></i><b>4.2</b> Fitted values and residuals</a></li>
+<li class="chapter" data-level="4.3" data-path="accessing-model-elements.html"><a href="accessing-model-elements.html#broom-functionality"><i class="fa fa-check"></i><b>4.3</b> Broom functionality</a></li>
+<li class="chapter" data-level="4.4" data-path="accessing-model-elements.html"><a href="accessing-model-elements.html#components"><i class="fa fa-check"></i><b>4.4</b> Components</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>5</b> Model methods</a><ul>
 <li class="chapter" data-level="5.1" data-path="methods.html"><a href="methods.html#interpolation"><i class="fa fa-check"></i><b>5.1</b> Interpolation</a></li>
@@ -224,12 +225,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##      AIC     AICc      BIC 
 ## 1033.474 1044.807 1072.177</code></pre>
 </div>
-<div id="accessibility" class="section level2">
-<h2><span class="header-section-number">4.2</span> Accessibility</h2>
+<div id="fitted-values-and-residuals" class="section level2">
+<h2><span class="header-section-number">4.2</span> Fitted values and residuals</h2>
+<p>Return a tsibble containing the index from the original data, with a measured variables for <code>.fitted</code> values and <code>.resids</code>.</p>
+</div>
+<div id="broom-functionality" class="section level2">
+<h2><span class="header-section-number">4.3</span> Broom functionality</h2>
 <p>augment(), tidy(), glance()</p>
 </div>
 <div id="components" class="section level2">
-<h2><span class="header-section-number">4.3</span> Components</h2>
+<h2><span class="header-section-number">4.4</span> Components</h2>
 <p>In many cases, a model can be used to extract features or components from data in a similar way to decomposition methods. We use the <code>components</code> verb to extract a tsibble of data features that have been extracted via modelling or decomposition.</p>
 <p>State space models such as <code>ETS</code> are well suited to this functionality as the states often represent features of interest.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>

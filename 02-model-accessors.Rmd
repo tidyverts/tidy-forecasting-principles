@@ -29,9 +29,14 @@ ets_fit %>%
 ```
 
 
-## Accessibility
+## Fitted values and residuals
+
+Return a tsibble containing the index from the original data, with a measured variables for `.fitted` values and `.resids`.
+
+## Broom functionality
 
 augment(), tidy(), glance()
+
 
 ## Components
 
