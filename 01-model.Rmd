@@ -4,8 +4,19 @@ The [fablelite](https://github.com/tidyverts/fablelite) package provides a set o
 
 The model function is expected to accept a tsibble and model formula, and return a fitted model stored as a mable.
 
-## Data handling
+## Model specification {#interface}
 
-The flexibility of tsibble requires additional checks to ensure that the input time series is appropriate for the model being used.
+A consistent interface across models is essential.
 
-## Object output
+## Model formula
+### Transformations
+
+`vignette("transformations", package="fable")`
+
+### Specials
+
+## Selection parameters
+
+## Optimisation parameters
+
+## Computational parameters

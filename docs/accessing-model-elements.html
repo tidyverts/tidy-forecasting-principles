@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="accuracy.html">
-
+<link rel="prev" href="model.html">
+<link rel="next" href="methods.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -188,19 +188,69 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="report" class="section level1">
-<h1><span class="header-section-number">9</span> Reporting</h1>
-<div id="model-equations" class="section level2">
-<h2><span class="header-section-number">9.1</span> Model equations</h2>
-<p><code>equation()</code> displays a mathematical representation of the model that has been used.</p>
-<p><a href="https://github.com/tidyverts/fable/issues/4" class="uri">https://github.com/tidyverts/fable/issues/4</a></p>
-<p><a href="https://github.com/tidymodels/broom/issues/492" class="uri">https://github.com/tidymodels/broom/issues/492</a></p>
-<p>(currently not implemented)</p>
+<div id="accessing-model-elements" class="section level1">
+<h1><span class="header-section-number">4</span> Accessing model elements</h1>
+<div id="display" class="section level2">
+<h2><span class="header-section-number">4.1</span> Display</h2>
+<p>The <code>print</code> and <code>summary</code> methods are standard displays for fitted models. The <code>print</code> method typically displays a limited amount of key information, such as the model that was fit, and the estimated coefficients. The <code>summary</code> function extends the <code>print</code> method with a more detailed summary of fit, which may include measures for goodness of fit, and significance of model terms.</p>
+<p>As fable naturally supports batch/multiple forecasting, the print method is standardised for any number of models. A very short model specific display can be defined using the <code>model_sum</code> generic, which is shown in the mable.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tsibbledata)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">ETS</span>(mdeaths)</a></code></pre></div>
+<pre><code>## # A mable: 1 model [1M]
+##   data               model     
+##   &lt;list&gt;             &lt;model&gt;   
+## 1 &lt;tsibble [72 × 3]&gt; ETS(M,A,A)</code></pre>
+<p>The summary method can then be used to reveal more information about this model, such as fitted parameters and goodness of fit. Ideally this information would also be standardised into a tabular form for batch modelling, although this is currently not the case.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">ETS</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span>summary</a></code></pre></div>
+<pre><code>## ETS(M,A,A) 
+## 
+##   Smoothing parameters:
+##     alpha = 0.0002065548 
+##     beta  = 0.0001865257 
+##     gamma = 0.000118306 
+## 
+##   Initial states:
+##         l         b       s1        s2        s3        s4        s5
+##  1671.676 -4.334248 373.1746 -121.3157 -246.1697 -484.8581 -476.2192
+##         s6        s7       s8       s9      s10      s11      s12
+##  -370.1939 -303.5806 -207.384 122.0022 483.3319 620.3601 610.8525
+## 
+## 
+##   sigma:  0.0951
+## 
+##      AIC     AICc      BIC 
+## 1033.474 1044.807 1072.177</code></pre>
 </div>
-<div id="object-reports" class="section level2">
-<h2><span class="header-section-number">9.2</span> Object reports</h2>
-<p><code>report()</code> returns a formatted summary of the object suitable for R Markdown documents and shiny applications.</p>
-<p>(currently not implemented)</p>
+<div id="accessibility" class="section level2">
+<h2><span class="header-section-number">4.2</span> Accessibility</h2>
+<p>augment(), tidy(), glance()</p>
+</div>
+<div id="components" class="section level2">
+<h2><span class="header-section-number">4.3</span> Components</h2>
+<p>In many cases, a model can be used to extract features or components from data in a similar way to decomposition methods. We use the <code>components</code> verb to extract a tsibble of data features that have been extracted via modelling or decomposition.</p>
+<p>State space models such as <code>ETS</code> are well suited to this functionality as the states often represent features of interest.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">ETS</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span>components</a></code></pre></div>
+<pre><code>## # A tsibble: 73 x 4 [1M]
+##       index level slope season
+##       &lt;mth&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1 1974 Jan 1672. -4.33   373.
+##  2 1974 Feb 1667. -4.36   611.
+##  3 1974 Mar 1663. -4.44   620.
+##  4 1974 Apr 1658. -4.49   483.
+##  5 1974 May 1654. -4.47   122.
+##  6 1974 Jun 1649. -4.46  -207.
+##  7 1974 Jul 1645. -4.48  -304.
+##  8 1974 Aug 1640. -4.48  -370.
+##  9 1974 Sep 1636. -4.48  -476.
+## 10 1974 Oct 1632. -4.47  -485.
+## # ... with 63 more rows</code></pre>
+<p><img src="tidy-forecasting_files/figure-html/components-display-1.png" width="672" /></p>
+<p>It may also be worth storing how these components can be used to produce the response, which can be used for <a href="https://mitchelloharawild.github.io/tidy-forecasting-principles/advanced.html#decomposition">decomposition modelling</a>.</p>
 
 </div>
 </div>
@@ -209,8 +259,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="accuracy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -240,7 +290,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/tidyverts/tidy-forecasting-principles/edit/master/07-reporting.Rmd",
+"link": "https://github.com/tidyverts/tidy-forecasting-principles/edit/master/02-model-accessors.Rmd",
 "text": "Edit"
 },
 "download": ["tidy-forecasting.pdf", "tidy-forecasting.epub"],
