@@ -8,6 +8,29 @@ The [forecast package](https://github.com/robjhyndman/forecast/) implements accu
 
 It is probably more transparent to compute accuracy metrics by directly providing actual response values and model predictions.
 
+## Model vs data centric
+
+forecast is model centric
+```{r, eval = FALSE}
+# forecast
+accuracy(f = forecast, x = new_ts)
+```
+yardstick is data centric
+https://github.com/r-lib/generics/pull/22
+
+```{r, eval = FALSE}
+# yardstick
+fit_tbl %>% 
+  accuracy(col1, col2)
+```
+
+Proposed fable API:
+```{r, eval = FALSE}
+# fable?
+accuracy(mable, train_tsibble, measures = funs(???), ...)
+accuracy(object = fable, new_data = test_tsibble, measures = funs(???), ...)
+```
+
 ## Cross validation
 
 `CV(tsbl, mdl, h, window_type, ...)`
