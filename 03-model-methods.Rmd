@@ -8,36 +8,44 @@ The [forecast package](https://github.com/robjhyndman/forecast/) provides the `n
 
 Tidy time series tools should allow users to interpolate missing values using any appropriate model. 
 
-For example, the `fpp2::mens400` dataset contains Olympic men's 400m track final winning times. The winning times for the 1916, 1940 and 1944 Olympics are missing from the dataset.
+For example, the `tsibbledata::olympic_running` dataset contains Olympic men's 400m track final winning times. The winning times for the 1916, 1940 and 1944 Olympics are missing from the dataset due to the World Wars.
 
 ```{r mens400, echo = FALSE}
-as_tsibble(fpp2::mens400) %>% 
-  ggplot(aes(x = index, y = value)) + 
-  geom_line() + 
-  theme_minimal()
+library(tsibbledata)
+olympic_running %>%
+  ggplot(aes(x=Year, y = Time, colour = Sex)) +
+  geom_line() +
+  geom_point(size = 1) +
+  facet_wrap(~ Length, scales = "free_y", nrow = 2) + 
+  theme_minimal() + 
+  scale_color_brewer(palette = "Dark2") + 
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  ylab("Running time (seconds)")
 ```
 
 We could then interpolate these missing values using the fitted values from a linear model with a trend:
 
 ```{r mens400-interpolated, eval = FALSE}
-as_tsibble(fpp2::mens400) %>% 
-  LM(value ~ trend()) %>% 
-  interpolate()
+olympic_running %>% 
+  LM(Time ~ trend()) %>% 
+  interpolate(olympic_running)
 ```
 ```{r mens400-interpolated-display, echo = FALSE}
-mens400_complete <- as_tsibble(fpp2::mens400) %>% 
-  LM(value ~ trend()) %>% 
-  interpolate()
-mens400_complete
+olympic_complete <- olympic_running %>% 
+  LM(Time ~ trend()) %>% 
+  interpolate(olympic_running)
+olympic_complete
 
-mens400_complete %>% 
-  ggplot(aes(x = index, y = value)) + 
-  geom_line(aes(colour = "Interpolated")) + 
-  geom_line(aes(colour = "Actual"), data = as_tsibble(fpp2::mens400)) + 
+olympic_running %>%
+  ggplot(aes(x=Year, y = Time, colour = Sex)) +
+  geom_line(aes(linetype = "Interpolated"), data = olympic_complete) +
+  geom_line(aes(linetype = "Actual")) +
+  geom_point(size = 1) +
+  facet_wrap(~ Length, scales = "free_y", nrow = 2) + 
   theme_minimal() + 
   scale_color_brewer(palette = "Dark2") + 
-  guides(colour = guide_legend(NULL, direction = "horizontal")) + 
-  theme(legend.position="bottom")
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  ylab("Running time (seconds)")
 ```
 
 
@@ -95,7 +103,7 @@ fit <- elec_tr %>%
 ```{r stream-fit-plot, echo = FALSE}
 ggplot(NULL, aes(x = index, y = Demand)) + 
   geom_line(data = elec_tr %>% mutate(facet = "Actual")) +
-  geom_line(aes(y = fitted), data = fitted(fit) %>% mutate(facet = "Fitted")) + 
+  geom_line(aes(y = .fitted), data = fitted(fit) %>% mutate(facet = "Fitted")) + 
   facet_grid(facet ~ .) +
   theme_minimal()
 ```
@@ -110,7 +118,7 @@ fit <- fit %>%
 ggplot(NULL, aes(x = index, y = Demand)) + 
   geom_line(data = elec_tr %>% mutate(facet = "Actual")) +
   geom_line(data = elec_stream %>% mutate(facet = "Actual")) +
-  geom_line(aes(y = fitted), data = fitted(fit) %>% mutate(facet = "Fitted")) + 
+  geom_line(aes(y = .fitted), data = fitted(fit) %>% mutate(facet = "Fitted")) + 
   facet_grid(facet ~ .) +
   theme_minimal()
 ```
