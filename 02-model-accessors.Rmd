@@ -6,37 +6,51 @@ The `print` and `summary` methods are standard displays for fitted models. The `
 
 As fable naturally supports batch/multiple forecasting, the print method is standardised for any number of models. A very short model specific display can be defined using the `model_sum` generic, which is shown in the mable.
 
-```{r ets-fit, eval = FALSE}
+```{r ets-fit}
 library(tsibbledata)
-UKLungDeaths %>% 
+ets_fit <- UKLungDeaths %>% 
   ETS(mdeaths)
 ```
 ```{r mable-print, echo = FALSE}
-ets_fit <- UKLungDeaths %>% 
-  ETS(mdeaths)
 ets_fit
 ```
 
 The summary method can then be used to reveal more information about this model, such as fitted parameters and goodness of fit. Ideally this information would also be standardised into a tabular form for batch modelling, although this is currently not the case.
-```{r ets-summary, eval = FALSE}
-UKLungDeaths %>% 
-  ETS(mdeaths) %>% 
-  summary
-```
-```{r mable-summary, echo = FALSE}
+```{r ets-summary}
 ets_fit %>% 
   summary
 ```
 
-
 ## Fitted values and residuals
 
-Return a tsibble containing the index from the original data, with a measured variables for `.fitted` values and `.resids`.
+Accessors for fitted values and residuals return a tsibble containing the index from the original data, with a measured variables for `.fitted` values and `.resids`. If the mable contains more than one model, the resulting object maintains and respects the key structure.
+
+```{r ets-fitted}
+ets_fit %>% 
+  fitted
+```
+
+```{r ets-resid}
+ets_fit %>% 
+  residuals
+```
 
 ## Broom functionality
 
-augment(), tidy(), glance()
+Common features from a model can also be accessed using verbs from the [broom package](https://github.com/tidymodels/broom). Again, key structures that exist within the mable are respected.
 
+```{r ets-augment}
+ets_fit %>% 
+  augment
+```
+```{r ets-tidy}
+ets_fit %>% 
+  tidy
+```
+```{r ets-glance}
+ets_fit %>% 
+  glance
+```
 
 ## Components
 

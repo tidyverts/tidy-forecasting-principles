@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-10-29">
+<meta name="date" content="2018-10-30">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -201,17 +201,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="model-vs-data-centric" class="section level2">
 <h2><span class="header-section-number">8.2</span> Model vs data centric</h2>
 <p>forecast is model centric</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># forecast</span></a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">accuracy</span>(<span class="dt">f =</span> forecast, <span class="dt">x =</span> new_ts)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># forecast</span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">accuracy</span>(<span class="dt">f =</span> forecast, <span class="dt">x =</span> new_ts)</a></code></pre></div>
 <p>yardstick is data centric
 <a href="https://github.com/r-lib/generics/pull/22" class="uri">https://github.com/r-lib/generics/pull/22</a></p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># yardstick</span></a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">fit_tbl <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="st">  </span><span class="kw">accuracy</span>(col1, col2)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="co"># yardstick</span></a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">fit_tbl <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb42-3" data-line-number="3"><span class="st">  </span><span class="kw">accuracy</span>(col1, col2)</a></code></pre></div>
 <p>Proposed fable API:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># fable?</span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">accuracy</span>(mable, train_tsibble, <span class="dt">measures =</span> <span class="kw">funs</span>(???), ...)</a>
-<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="kw">accuracy</span>(<span class="dt">object =</span> fable, <span class="dt">new_data =</span> test_tsibble, <span class="dt">measures =</span> <span class="kw">funs</span>(???), ...)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co"># fable?</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">accuracy</span>(mable, train_tsibble, <span class="dt">measures =</span> <span class="kw">funs</span>(???), ...)</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="kw">accuracy</span>(<span class="dt">object =</span> fable, <span class="dt">new_data =</span> test_tsibble, <span class="dt">measures =</span> <span class="kw">funs</span>(???), ...)</a></code></pre></div>
 </div>
 <div id="cross-validation" class="section level2">
 <h2><span class="header-section-number">8.3</span> Cross validation</h2>
