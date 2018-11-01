@@ -24,12 +24,60 @@ fit_tbl %>%
   accuracy(col1, col2)
 ```
 
-Proposed fable API:
-```{r, eval = FALSE}
-# fable?
-accuracy(mable, train_tsibble, measures = funs(???), ...)
-accuracy(object = fable, new_data = test_tsibble, measures = funs(???), ...)
+## [Proposed fable API](https://github.com/tidyverts/fable/issues/66)
+
+### Desirable functionality
+By default, `accuracy()` should provide a basic set of measures of fit for both models (`mdl_df`) and forecasts (`fbl_ts`), similarly to the `forecast` package (perhaps only MAE, RMSE/MSE,  and MAPE by default).
+
+It should be sufficiently flexible to support analysts in calculating a wide variety of accuracy measures, including:
+
+- Point forecast accuracy measures
+- Interval accuracy measures
+- Distribution accuracy measures
+- User specified accuracy measures
+
+The user should be able to specify which measures they wish to compute, including measures exported by `fablelite`, measures from extension packages, and user specified measures.
+
+### Proposed user interface
+
+The accuracy measures to be calculated can be specified as a list of accuracy measure functions as the `measures` argument. This input will also be flattened, allowing groups of accuracy measures to be defined.
+
+The `...` is used to provide additional arguments that will be applied to all accuracy measures (where supported).
+
+For models (`mdl_df`), no additional inputs are required:
+
+```r
+mbl %>% 
+  accuracy(
+    measures = list(MASE, MAE, ME),
+    ...
+  )
 ```
+
+For forecasts (`fbl_ts`), the test set must be provided. Additionally, the dataset used for model training can be provided (interface still under consideration) to extend the inputs (required for MASE):
+```r
+mbl %>% 
+  accuracy(
+    new_data,
+    measures = list(MASE, MAE, ME),
+    training_data = NULL
+    ...
+  )
+```
+
+### Implementation details
+
+To achieve this, accuracy measure functions can expect a set of basic inputs from `accuracy()`. The measures that are required for computation should be used as formals for the function. These inputs include (list is not yet comprehensive and will be added to):
+
+- .resid: A vector of residuals from either the training (model accuracy) or test (forecast accuracy) data.
+- .resp: A vector of responses matching the residuals (for forecast accuracy, the original data must be provided).
+- .fitted: The fitted values from the model, or forecasted values from the forecast.
+- .dist: The distribution of fitted values from the model, or forecasted values from the forecast.
+- .period: The seasonal period of the data (defaulting to 'smallest' seasonal period).
+- .expr_resp: An expression for the response variable.
+
+If a method allows more inputs than this, such as demeaning for MASE, these additional arguments are provided in the dots of the accuracy function.
+
 
 ## Cross validation
 

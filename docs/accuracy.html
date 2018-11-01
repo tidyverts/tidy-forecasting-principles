@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-10-30">
+<meta name="date" content="2018-11-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -166,8 +166,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="accuracy.html"><a href="accuracy.html"><i class="fa fa-check"></i><b>8</b> Forecast evaluation</a><ul>
 <li class="chapter" data-level="8.1" data-path="accuracy.html"><a href="accuracy.html#accuracy-1"><i class="fa fa-check"></i><b>8.1</b> Accuracy</a></li>
 <li class="chapter" data-level="8.2" data-path="accuracy.html"><a href="accuracy.html#model-vs-data-centric"><i class="fa fa-check"></i><b>8.2</b> Model vs data centric</a></li>
-<li class="chapter" data-level="8.3" data-path="accuracy.html"><a href="accuracy.html#cross-validation"><i class="fa fa-check"></i><b>8.3</b> Cross validation</a></li>
-<li class="chapter" data-level="8.4" data-path="accuracy.html"><a href="accuracy.html#visualisation-2"><i class="fa fa-check"></i><b>8.4</b> Visualisation</a></li>
+<li class="chapter" data-level="8.3" data-path="accuracy.html"><a href="accuracy.html#proposed-fable-api"><i class="fa fa-check"></i><b>8.3</b> <span>Proposed fable API</span></a></li>
+<li class="chapter" data-level="8.4" data-path="accuracy.html"><a href="accuracy.html#cross-validation"><i class="fa fa-check"></i><b>8.4</b> Cross validation</a></li>
+<li class="chapter" data-level="8.5" data-path="accuracy.html"><a href="accuracy.html#visualisation-2"><i class="fa fa-check"></i><b>8.5</b> Visualisation</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="report.html"><a href="report.html"><i class="fa fa-check"></i><b>9</b> Reporting</a><ul>
 <li class="chapter" data-level="9.1" data-path="report.html"><a href="report.html#model-equations"><i class="fa fa-check"></i><b>9.1</b> Model equations</a></li>
@@ -208,17 +209,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="co"># yardstick</span></a>
 <a class="sourceLine" id="cb42-2" data-line-number="2">fit_tbl <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb42-3" data-line-number="3"><span class="st">  </span><span class="kw">accuracy</span>(col1, col2)</a></code></pre></div>
-<p>Proposed fable API:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co"># fable?</span></a>
-<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">accuracy</span>(mable, train_tsibble, <span class="dt">measures =</span> <span class="kw">funs</span>(???), ...)</a>
-<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="kw">accuracy</span>(<span class="dt">object =</span> fable, <span class="dt">new_data =</span> test_tsibble, <span class="dt">measures =</span> <span class="kw">funs</span>(???), ...)</a></code></pre></div>
+</div>
+<div id="proposed-fable-api" class="section level2">
+<h2><span class="header-section-number">8.3</span> <a href="https://github.com/tidyverts/fable/issues/66">Proposed fable API</a></h2>
+<div id="desirable-functionality" class="section level3">
+<h3><span class="header-section-number">8.3.1</span> Desirable functionality</h3>
+<p>By default, <code>accuracy()</code> should provide a basic set of measures of fit for both models (<code>mdl_df</code>) and forecasts (<code>fbl_ts</code>), similarly to the <code>forecast</code> package (perhaps only MAE, RMSE/MSE, and MAPE by default).</p>
+<p>It should be sufficiently flexible to support analysts in calculating a wide variety of accuracy measures, including:</p>
+<ul>
+<li>Point forecast accuracy measures</li>
+<li>Interval accuracy measures</li>
+<li>Distribution accuracy measures</li>
+<li>User specified accuracy measures</li>
+</ul>
+<p>The user should be able to specify which measures they wish to compute, including measures exported by <code>fablelite</code>, measures from extension packages, and user specified measures.</p>
+</div>
+<div id="proposed-user-interface" class="section level3">
+<h3><span class="header-section-number">8.3.2</span> Proposed user interface</h3>
+<p>The accuracy measures to be calculated can be specified as a list of accuracy measure functions as the <code>measures</code> argument. This input will also be flattened, allowing groups of accuracy measures to be defined.</p>
+<p>The <code>...</code> is used to provide additional arguments that will be applied to all accuracy measures (where supported).</p>
+<p>For models (<code>mdl_df</code>), no additional inputs are required:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">mbl <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="st">  </span><span class="kw">accuracy</span>(</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4">    ...</a>
+<a class="sourceLine" id="cb43-5" data-line-number="5">  )</a></code></pre></div>
+<p>For forecasts (<code>fbl_ts</code>), the test set must be provided. Additionally, the dataset used for model training can be provided (interface still under consideration) to extend the inputs (required for MASE):</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">mbl <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="st">  </span><span class="kw">accuracy</span>(</a>
+<a class="sourceLine" id="cb44-3" data-line-number="3">    new_data,</a>
+<a class="sourceLine" id="cb44-4" data-line-number="4">    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),</a>
+<a class="sourceLine" id="cb44-5" data-line-number="5">    <span class="dt">training_data =</span> <span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb44-6" data-line-number="6">    ...</a>
+<a class="sourceLine" id="cb44-7" data-line-number="7">  )</a></code></pre></div>
+</div>
+<div id="implementation-details" class="section level3">
+<h3><span class="header-section-number">8.3.3</span> Implementation details</h3>
+<p>To achieve this, accuracy measure functions can expect a set of basic inputs from <code>accuracy()</code>. The measures that are required for computation should be used as formals for the function. These inputs include (list is not yet comprehensive and will be added to):</p>
+<ul>
+<li>.resid: A vector of residuals from either the training (model accuracy) or test (forecast accuracy) data.</li>
+<li>.resp: A vector of responses matching the residuals (for forecast accuracy, the original data must be provided).</li>
+<li>.fitted: The fitted values from the model, or forecasted values from the forecast.</li>
+<li>.dist: The distribution of fitted values from the model, or forecasted values from the forecast.</li>
+<li>.period: The seasonal period of the data (defaulting to ‘smallest’ seasonal period).</li>
+<li>.expr_resp: An expression for the response variable.</li>
+</ul>
+<p>If a method allows more inputs than this, such as demeaning for MASE, these additional arguments are provided in the dots of the accuracy function.</p>
+</div>
 </div>
 <div id="cross-validation" class="section level2">
-<h2><span class="header-section-number">8.3</span> Cross validation</h2>
+<h2><span class="header-section-number">8.4</span> Cross validation</h2>
 <p><code>CV(tsbl, mdl, h, window_type, ...)</code></p>
 </div>
 <div id="visualisation-2" class="section level2">
-<h2><span class="header-section-number">8.4</span> Visualisation</h2>
+<h2><span class="header-section-number">8.5</span> Visualisation</h2>
 
 </div>
 </div>
