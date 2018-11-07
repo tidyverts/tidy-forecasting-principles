@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-11-01">
+<meta name="date" content="2018-11-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -195,22 +195,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">7</span> Forecasting</h1>
 <div id="the-fable-object" class="section level2">
 <h2><span class="header-section-number">7.1</span> The fable object</h2>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="st">  </span><span class="kw">ETS</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-3" data-line-number="3"><span class="st">  </span><span class="kw">forecast</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="st">  </span><span class="kw">ETS</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="st">  </span><span class="kw">forecast</span>()</a></code></pre></div>
 <pre><code>## # A fable: 24 x 3 [1M]
-##       index  mean .distribution    
-##  *    &lt;mth&gt; &lt;dbl&gt; &lt;dist&gt;           
-##  1 1980 Jan 1957. N(1957, sd = 186)
-##  2 1980 Feb 1962. N(1962, sd = 187)
-##  3 1980 Mar 1821. N(1821, sd = 173)
-##  4 1980 Apr 1455. N(1455, sd = 138)
-##  5 1980 May 1121. N(1121, sd = 107)
-##  6 1980 Jun 1020. N(1020, sd = 97) 
-##  7 1980 Jul  949. N(949, sd = 90)  
-##  8 1980 Aug  839. N(839, sd = 80)  
-##  9 1980 Sep  825. N(825, sd = 79)  
-## 10 1980 Oct 1060. N(1060, sd = 101)
+##       index mdeaths .distribution    
+##  *    &lt;mth&gt;   &lt;dbl&gt; &lt;dist&gt;           
+##  1 1980 Jan   1957. N(1957, sd = 186)
+##  2 1980 Feb   1962. N(1962, sd = 187)
+##  3 1980 Mar   1821. N(1821, sd = 173)
+##  4 1980 Apr   1455. N(1455, sd = 138)
+##  5 1980 May   1121. N(1121, sd = 107)
+##  6 1980 Jun   1020. N(1020, sd = 97) 
+##  7 1980 Jul    949. N(949, sd = 90)  
+##  8 1980 Aug    839. N(839, sd = 80)  
+##  9 1980 Sep    825. N(825, sd = 79)  
+## 10 1980 Oct   1060. N(1060, sd = 101)
 ## # ... with 14 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/forecast-display-1.png" width="672" /></p>
 <ul>

@@ -23,8 +23,7 @@ The user should be able to specify how each of the components are modelled, and 
 ```{r decomp}
 library(tsibblestats)
 md_decomp <- UKLungDeaths %>%
-  STL(mdeaths ~ season(window = 12)) %>% 
-  components
+  STL(mdeaths ~ season(window = 12))
 md_decomp
 ```
 ```{r decomp-plot, echo = FALSE}

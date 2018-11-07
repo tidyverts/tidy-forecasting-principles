@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-11-01">
+<meta name="date" content="2018-11-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -197,29 +197,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">6.1</span> Batch</h2>
 <p><a href="https://github.com/tidyverts/fable/wiki/Tidy-forecasting-with-the-fable-package" class="uri">https://github.com/tidyverts/fable/wiki/Tidy-forecasting-with-the-fable-package</a></p>
 <p>Estimating multiple models is a <strong>key</strong> feature of fable. Most time series can be naturally disaggregated using a series of factors known as keys. These keys are used to uniquely identify separate time series, each of which can be modelled separately.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;deaths&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-3" data-line-number="3"><span class="st">  </span><span class="kw">ETS</span>(deaths)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;deaths&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="st">  </span><span class="kw">ETS</span>(deaths)</a></code></pre></div>
 <pre><code>## # A mable: 2 models
 ## # Key:     sex [2]
 ##   sex     model     
 ## * &lt;chr&gt;   &lt;model&gt;   
-## 1 mdeaths ETS(M,A,A)
-## 2 fdeaths ETS(M,N,M)</code></pre>
+## 1 fdeaths ETS(M,N,M)
+## 2 mdeaths ETS(M,A,A)</code></pre>
 </div>
 <div id="decomposition" class="section level2">
 <h2><span class="header-section-number">6.2</span> Decomposition</h2>
 <p><a href="https://github.com/tidyverts/fable/wiki/Combining-models" class="uri">https://github.com/tidyverts/fable/wiki/Combining-models</a></p>
 <p>Objects which support a <code>components</code> method can then have their components modelled separately. The working name for this functionality is <code>model_components</code>, however a shorter (single word) verb is preferred.</p>
 <p>The user should be able to specify how each of the components are modelled, and the <code>components</code> method should define how each component is combined (and perhaps some default models that can be used).</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">library</span>(tsibblestats)</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2">md_decomp &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="st">  </span><span class="kw">STL</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">season</span>(<span class="dt">window =</span> <span class="dv">12</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-4" data-line-number="4"><span class="st">  </span>components</a>
-<a class="sourceLine" id="cb36-5" data-line-number="5">md_decomp</a></code></pre></div>
-<pre><code>## # A tsibble: 72 x 4 [1M]
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">library</span>(tsibblestats)</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">md_decomp &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="st">  </span><span class="kw">STL</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">season</span>(<span class="dt">window =</span> <span class="dv">12</span>))</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">md_decomp</a></code></pre></div>
+<pre><code>## # A dable:       72 x 4 [1M]
+## # Decomposition: mdeaths = Trend + Seasonal_year + Remainder
 ##       index Trend Seasonal_year Remainder
-##       &lt;mth&gt; &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+##  *    &lt;mth&gt; &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;
 ##  1 1974 Jan 1510.          594.     30.0 
 ##  2 1974 Feb 1523.          581.   -241.  
 ##  3 1974 Mar 1536.          469.   -127.  
@@ -232,8 +232,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 1974 Oct 1615.         -243.    120.  
 ## # ... with 62 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/decomp-plot-1.png" width="672" /></p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">md_decomp <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="st">  </span><span class="kw">model_components</span>(???)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">md_decomp <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="st">  </span><span class="kw">model_components</span>(???)</a></code></pre></div>
 </div>
 <div id="ensemble" class="section level2">
 <h2><span class="header-section-number">6.3</span> Ensemble</h2>

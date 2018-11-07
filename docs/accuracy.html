@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-11-01">
+<meta name="date" content="2018-11-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -202,13 +202,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="model-vs-data-centric" class="section level2">
 <h2><span class="header-section-number">8.2</span> Model vs data centric</h2>
 <p>forecast is model centric</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># forecast</span></a>
-<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">accuracy</span>(<span class="dt">f =</span> forecast, <span class="dt">x =</span> new_ts)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># forecast</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw">accuracy</span>(<span class="dt">f =</span> forecast, <span class="dt">x =</span> new_ts)</a></code></pre></div>
 <p>yardstick is data centric
 <a href="https://github.com/r-lib/generics/pull/22" class="uri">https://github.com/r-lib/generics/pull/22</a></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="co"># yardstick</span></a>
-<a class="sourceLine" id="cb42-2" data-line-number="2">fit_tbl <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb42-3" data-line-number="3"><span class="st">  </span><span class="kw">accuracy</span>(col1, col2)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># yardstick</span></a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">fit_tbl <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb39-3" data-line-number="3"><span class="st">  </span><span class="kw">accuracy</span>(col1, col2)</a></code></pre></div>
 </div>
 <div id="proposed-fable-api" class="section level2">
 <h2><span class="header-section-number">8.3</span> <a href="https://github.com/tidyverts/fable/issues/66">Proposed fable API</a></h2>
@@ -229,19 +229,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The accuracy measures to be calculated can be specified as a list of accuracy measure functions as the <code>measures</code> argument. This input will also be flattened, allowing groups of accuracy measures to be defined.</p>
 <p>The <code>...</code> is used to provide additional arguments that will be applied to all accuracy measures (where supported).</p>
 <p>For models (<code>mdl_df</code>), no additional inputs are required:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">mbl <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="st">  </span><span class="kw">accuracy</span>(</a>
-<a class="sourceLine" id="cb43-3" data-line-number="3">    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),</a>
-<a class="sourceLine" id="cb43-4" data-line-number="4">    ...</a>
-<a class="sourceLine" id="cb43-5" data-line-number="5">  )</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">mbl <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="st">  </span><span class="kw">accuracy</span>(</a>
+<a class="sourceLine" id="cb40-3" data-line-number="3">    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),</a>
+<a class="sourceLine" id="cb40-4" data-line-number="4">    ...</a>
+<a class="sourceLine" id="cb40-5" data-line-number="5">  )</a></code></pre></div>
 <p>For forecasts (<code>fbl_ts</code>), the test set must be provided. Additionally, the dataset used for model training can be provided (interface still under consideration) to extend the inputs (required for MASE):</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">mbl <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="st">  </span><span class="kw">accuracy</span>(</a>
-<a class="sourceLine" id="cb44-3" data-line-number="3">    new_data,</a>
-<a class="sourceLine" id="cb44-4" data-line-number="4">    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),</a>
-<a class="sourceLine" id="cb44-5" data-line-number="5">    <span class="dt">training_data =</span> <span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb44-6" data-line-number="6">    ...</a>
-<a class="sourceLine" id="cb44-7" data-line-number="7">  )</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">mbl <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="st">  </span><span class="kw">accuracy</span>(</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">    new_data,</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),</a>
+<a class="sourceLine" id="cb41-5" data-line-number="5">    <span class="dt">training_data =</span> <span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6">    ...</a>
+<a class="sourceLine" id="cb41-7" data-line-number="7">  )</a></code></pre></div>
 </div>
 <div id="implementation-details" class="section level3">
 <h3><span class="header-section-number">8.3.3</span> Implementation details</h3>
