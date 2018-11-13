@@ -9,11 +9,16 @@ The model function is expected to accept a tsibble and model formula, and return
 A consistent interface across models is essential.
 
 ## Model formula
-### Transformations
 
-`vignette("transformations", package="fable")`
+fable introduces the formula based model specification that is familiar in cross-sectional models to time series. This allows an interface for concise and human readable model specifications. Additionally, this change allows a more flexible specification of transformations, and model elements. A typical model formula may look like this:
 
-### Specials
+```{r model-formula, eval = FALSE, echo = TRUE}
+log(y) ~ trend() + season(period = "day") + x
+```
+
+Like `lm()` and other cross-sectional model interfaces, the left hand side of the formula defines the response. fable extends this standard usage by supporting transformations of any type. In the above example, a `log` transformation has been used on the response variable, `y`. Unlike other models, the transformation specified in formula's LHS will be automatically inverted, and used for automatic back-transformation of your forecasts and fitted values. For more details on how transformations work within fable, you can refer to the transformations vignette: `vignette("transformations", package="fable")`
+
+On the right hand side of the formula, we define the specials used for the model. Specifying the RHS is optional, and any required specials that are omitted will be included using their defaults (allowing for automatic model selection). In the above formula, we have included a trend, a daily seasonal pattern and exogenous regressor `x`. The specials that are supported will vary between each model function, and the available specials are (should be) documented under the "Model Formula" section of the help file.
 
 ## Selection parameters
 
