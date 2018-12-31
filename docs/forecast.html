@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Tidy time series forecasting with fable</title>
+  <title>7 Forecasting | Tidy time series forecasting with fable</title>
   <meta name="description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Tidy time series forecasting with fable" />
+  <meta property="og:title" content="7 Forecasting | Tidy time series forecasting with fable />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="mitchelloharawild/tidy-forecasting-principles" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Tidy time series forecasting with fable" />
+  <meta name="twitter:title" content="7 Forecasting | Tidy time series forecasting with fable />
   
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-11-13">
+<meta name="date" content="2018-12-31">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,6 +36,7 @@
 <link rel="next" href="accuracy.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -195,22 +196,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">7</span> Forecasting</h1>
 <div id="the-fable-object" class="section level2">
 <h2><span class="header-section-number">7.1</span> The fable object</h2>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="st">  </span><span class="kw">ETS</span>(mdeaths) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-3" data-line-number="3"><span class="st">  </span><span class="kw">forecast</span>()</a></code></pre></div>
-<pre><code>## # A fable: 24 x 3 [1M]
-##       index mdeaths .distribution    
-##  *    &lt;mth&gt;   &lt;dbl&gt; &lt;dist&gt;           
-##  1 1980 Jan   1957. N(1957, sd = 186)
-##  2 1980 Feb   1962. N(1962, sd = 187)
-##  3 1980 Mar   1821. N(1821, sd = 173)
-##  4 1980 Apr   1455. N(1455, sd = 138)
-##  5 1980 May   1121. N(1121, sd = 107)
-##  6 1980 Jun   1020. N(1020, sd = 97) 
-##  7 1980 Jul    949. N(949, sd = 90)  
-##  8 1980 Aug    839. N(839, sd = 80)  
-##  9 1980 Sep    825. N(825, sd = 79)  
-## 10 1980 Oct   1060. N(1060, sd = 101)
+<pre class="sourceCode r"><code class="sourceCode r">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">model</span>(<span class="kw">ETS</span>(mdeaths)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">forecast</span>()</code></pre>
+<pre><code>## Selecting index: &quot;index&quot;</code></pre>
+<pre><code>## # A fable: 24 x 4 [1M]
+## # Key:     .model [1]
+##    .model          index mdeaths .distribution 
+##    &lt;chr&gt;           &lt;mth&gt;   &lt;dbl&gt; &lt;dist&gt;        
+##  1 ETS(mdeaths) 1980 Jan   1957. N(1957, 34666)
+##  2 ETS(mdeaths) 1980 Feb   1962. N(1962, 34842)
+##  3 ETS(mdeaths) 1980 Mar   1821. N(1821, 29997)
+##  4 ETS(mdeaths) 1980 Apr   1455. N(1455, 19154)
+##  5 ETS(mdeaths) 1980 May   1121. N(1121, 11370)
+##  6 ETS(mdeaths) 1980 Jun   1020. N(1020,  9419)
+##  7 ETS(mdeaths) 1980 Jul    949. N( 949,  8151)
+##  8 ETS(mdeaths) 1980 Aug    839. N( 839,  6363)
+##  9 ETS(mdeaths) 1980 Sep    825. N( 825,  6165)
+## 10 ETS(mdeaths) 1980 Oct   1060. N(1060, 10160)
 ## # ... with 14 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/forecast-display-1.png" width="672" /></p>
 <ul>
@@ -263,7 +266,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -275,6 +278,10 @@ gitbook.start({
 "edit": {
 "link": "https://github.com/tidyverts/tidy-forecasting-principles/edit/master/05-forecasting.Rmd",
 "text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
 },
 "download": ["tidy-forecasting.pdf", "tidy-forecasting.epub"],
 "toc": {

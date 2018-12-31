@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Tidy time series forecasting with fable</title>
+  <title>8 Forecast evaluation | Tidy time series forecasting with fable</title>
   <meta name="description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Tidy time series forecasting with fable" />
+  <meta property="og:title" content="8 Forecast evaluation | Tidy time series forecasting with fable />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="mitchelloharawild/tidy-forecasting-principles" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Tidy time series forecasting with fable" />
+  <meta name="twitter:title" content="8 Forecast evaluation | Tidy time series forecasting with fable />
   
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-11-13">
+<meta name="date" content="2018-12-31">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,6 +36,7 @@
 <link rel="next" href="report.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -202,13 +203,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="model-vs-data-centric" class="section level2">
 <h2><span class="header-section-number">8.2</span> Model vs data centric</h2>
 <p>forecast is model centric</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="co"># forecast</span></a>
-<a class="sourceLine" id="cb42-2" data-line-number="2"><span class="kw">accuracy</span>(<span class="dt">f =</span> forecast, <span class="dt">x =</span> new_ts)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># forecast</span>
+<span class="kw">accuracy</span>(<span class="dt">f =</span> forecast, <span class="dt">x =</span> new_ts)</code></pre>
 <p>yardstick is data centric
 <a href="https://github.com/r-lib/generics/pull/22" class="uri">https://github.com/r-lib/generics/pull/22</a></p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co"># yardstick</span></a>
-<a class="sourceLine" id="cb43-2" data-line-number="2">fit_tbl <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="st">  </span><span class="kw">accuracy</span>(col1, col2)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># yardstick</span>
+fit_tbl <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">accuracy</span>(col1, col2)</code></pre>
 </div>
 <div id="proposed-fable-api" class="section level2">
 <h2><span class="header-section-number">8.3</span> <a href="https://github.com/tidyverts/fable/issues/66">Proposed fable API</a></h2>
@@ -229,19 +230,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The accuracy measures to be calculated can be specified as a list of accuracy measure functions as the <code>measures</code> argument. This input will also be flattened, allowing groups of accuracy measures to be defined.</p>
 <p>The <code>...</code> is used to provide additional arguments that will be applied to all accuracy measures (where supported).</p>
 <p>For models (<code>mdl_df</code>), no additional inputs are required:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">mbl <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="st">  </span><span class="kw">accuracy</span>(</a>
-<a class="sourceLine" id="cb44-3" data-line-number="3">    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),</a>
-<a class="sourceLine" id="cb44-4" data-line-number="4">    ...</a>
-<a class="sourceLine" id="cb44-5" data-line-number="5">  )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">mbl <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">accuracy</span>(
+    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),
+    ...
+  )</code></pre>
 <p>For forecasts (<code>fbl_ts</code>), the test set must be provided. Additionally, the dataset used for model training can be provided (interface still under consideration) to extend the inputs (required for MASE):</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">mbl <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb45-2" data-line-number="2"><span class="st">  </span><span class="kw">accuracy</span>(</a>
-<a class="sourceLine" id="cb45-3" data-line-number="3">    new_data,</a>
-<a class="sourceLine" id="cb45-4" data-line-number="4">    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),</a>
-<a class="sourceLine" id="cb45-5" data-line-number="5">    <span class="dt">training_data =</span> <span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb45-6" data-line-number="6">    ...</a>
-<a class="sourceLine" id="cb45-7" data-line-number="7">  )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">mbl <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">accuracy</span>(
+    new_data,
+    <span class="dt">measures =</span> <span class="kw">list</span>(MASE, MAE, ME),
+    <span class="dt">training_data =</span> <span class="ot">NULL</span>
+    ...
+  )</code></pre>
 </div>
 <div id="implementation-details" class="section level3">
 <h3><span class="header-section-number">8.3.3</span> Implementation details</h3>
@@ -292,7 +293,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -304,6 +305,10 @@ gitbook.start({
 "edit": {
 "link": "https://github.com/tidyverts/tidy-forecasting-principles/edit/master/06-evaluation.Rmd",
 "text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
 },
 "download": ["tidy-forecasting.pdf", "tidy-forecasting.epub"],
 "toc": {

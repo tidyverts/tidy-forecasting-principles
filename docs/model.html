@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Tidy time series forecasting with fable</title>
+  <title>3 Model basics | Tidy time series forecasting with fable</title>
   <meta name="description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Tidy time series forecasting with fable" />
+  <meta property="og:title" content="3 Model basics | Tidy time series forecasting with fable />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="mitchelloharawild/tidy-forecasting-principles" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Tidy time series forecasting with fable" />
+  <meta name="twitter:title" content="3 Model basics | Tidy time series forecasting with fable />
   
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-11-13">
+<meta name="date" content="2018-12-31">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,6 +36,7 @@
 <link rel="next" href="accessing-model-elements.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -202,7 +203,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="model-formula" class="section level2">
 <h2><span class="header-section-number">3.2</span> Model formula</h2>
 <p>fable introduces the formula based model specification that is familiar in cross-sectional models to time series. This allows an interface for concise and human readable model specifications. Additionally, this change allows a more flexible specification of transformations, and model elements. A typical model formula may look like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">log</span>(y) <span class="op">~</span><span class="st"> </span><span class="kw">trend</span>() <span class="op">+</span><span class="st"> </span><span class="kw">season</span>(<span class="dt">period =</span> <span class="st">&quot;day&quot;</span>) <span class="op">+</span><span class="st"> </span>x</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(y) <span class="op">~</span><span class="st"> </span><span class="kw">trend</span>() <span class="op">+</span><span class="st"> </span><span class="kw">season</span>(<span class="dt">period =</span> <span class="st">&quot;day&quot;</span>) <span class="op">+</span><span class="st"> </span>x</code></pre>
 <p>Like <code>lm()</code> and other cross-sectional model interfaces, the left hand side of the formula defines the response. fable extends this standard usage by supporting transformations of any type. In the above example, a <code>log</code> transformation has been used on the response variable, <code>y</code>. Unlike other models, the transformation specified in formula’s LHS will be automatically inverted, and used for automatic back-transformation of your forecasts and fitted values. For more details on how transformations work within fable, you can refer to the transformations vignette: <code>vignette(&quot;transformations&quot;, package=&quot;fable&quot;)</code></p>
 <p>On the right hand side of the formula, we define the specials used for the model. Specifying the RHS is optional, and any required specials that are omitted will be included using their defaults (allowing for automatic model selection). In the above formula, we have included a trend, a daily seasonal pattern and exogenous regressor <code>x</code>. The specials that are supported will vary between each model function, and the available specials are (should be) documented under the “Model Formula” section of the help file.</p>
 </div>
@@ -243,7 +244,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -255,6 +256,10 @@ gitbook.start({
 "edit": {
 "link": "https://github.com/tidyverts/tidy-forecasting-principles/edit/master/01-model.Rmd",
 "text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
 },
 "download": ["tidy-forecasting.pdf", "tidy-forecasting.epub"],
 "toc": {

@@ -78,7 +78,6 @@ To achieve this, accuracy measure functions can expect a set of basic inputs fro
 
 If a method allows more inputs than this, such as demeaning for MASE, these additional arguments are provided in the dots of the accuracy function.
 
-
 ## Cross validation
 
 `CV(tsbl, mdl, h, window_type, ...)`

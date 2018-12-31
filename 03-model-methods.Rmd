@@ -27,12 +27,12 @@ We could then interpolate these missing values using the fitted values from a li
 
 ```{r mens400-interpolated, eval = FALSE}
 olympic_running %>% 
-  TSLM(Time ~ trend()) %>% 
+  model(lm = TSLM(Time ~ trend())) %>% 
   interpolate(olympic_running)
 ```
 ```{r mens400-interpolated-display, echo = FALSE}
 olympic_complete <- olympic_running %>% 
-  TSLM(Time ~ trend()) %>% 
+  model(lm = TSLM(Time ~ trend())) %>% 
   interpolate(olympic_running)
 olympic_complete
 
@@ -63,7 +63,7 @@ For the ETS model for `mdeaths` estimated above:
 ```{r ets-mdeaths, eval = FALSE}
 library(fable)
 ets_fit <- as_tsibble(mdeaths) %>% 
-  ETS(value)
+  model(ETS(value))
 ```
 
 We may be interested in using the same model with the same coefficients to estimate the `fdeaths` series:
@@ -98,7 +98,7 @@ A (minimal) model for the electricity demand above can be estimated using [fasst
 
 ```{r stream-fit, cache=TRUE}
 fit <- elec_tr %>% 
-  fasster(Demand ~ WorkDay %S% (poly(1) + trig(10)))
+  model(fasster = fasster(Demand ~ WorkDay %S% (poly(1) + trig(10))))
 ```
 ```{r stream-fit-plot, echo = FALSE}
 ggplot(NULL, aes(x = index, y = Demand)) + 
@@ -155,7 +155,7 @@ For the end user, creating simulations would work like this:
 library(fable)
 library(tsibbledata)
 UKLungDeaths %>% 
-  TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
+  model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
   simulate(UKLungDeaths, times = 5)
 ```
 
@@ -163,7 +163,7 @@ UKLungDeaths %>%
 library(fable)
 library(tsibbledata)
 sim1 <- UKLungDeaths %>% 
-  TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
+  model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
   simulate(UKLungDeaths, times = 5)
 sim1
 library(ggplot2)
@@ -180,7 +180,7 @@ Or, to simulate beyond the sample:
 library(lubridate)
 UKLungDeaths %>% 
   filter(year(index) <= 1978) %>% 
-  TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
+  model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
   simulate(
     UKLungDeaths %>% filter(year(index) > 1978),
     times = 5
@@ -190,7 +190,7 @@ UKLungDeaths %>%
 library(lubridate)
 sim2 <- UKLungDeaths %>% 
   filter(year(index) <= 1978) %>% 
-  TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths) %>% 
+  model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
   simulate(
     UKLungDeaths %>% filter(year(index) > 1978),
     times = 5

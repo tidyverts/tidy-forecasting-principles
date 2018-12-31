@@ -4,7 +4,7 @@
 
 ```{r forecast, eval = FALSE}
 UKLungDeaths %>% 
-  ETS(mdeaths) %>% 
+  model(ETS(mdeaths)) %>% 
   forecast()
 ```
 
@@ -13,7 +13,7 @@ ets_fc <- ets_fit %>%
   forecast()
 ets_fc
 ets_fc %>% 
-  autoplot()
+  autoplot(UKLungDeaths)
 ```
 
 

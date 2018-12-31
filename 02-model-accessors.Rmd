@@ -9,7 +9,7 @@ As fable naturally supports batch/multiple forecasting, the print method is stan
 ```{r ets-fit}
 library(tsibbledata)
 ets_fit <- UKLungDeaths %>% 
-  ETS(mdeaths)
+  model(ETS(mdeaths))
 ```
 ```{r mable-print, echo = FALSE}
 ets_fit
@@ -43,7 +43,7 @@ Common features from a model can also be accessed using verbs from the [broom pa
 ets_fit %>% 
   augment
 ```
-```{r ets-tidy}
+```{r ets-tidy, eval = FALSE}
 ets_fit %>% 
   tidy
 ```
@@ -59,7 +59,7 @@ In many cases, a model can be used to extract features or components from data i
 State space models such as `ETS` are well suited to this functionality as the states often represent features of interest.
 ```{r components, eval = FALSE}
 UKLungDeaths %>% 
-  ETS(mdeaths) %>% 
+  model(ETS(mdeaths)) %>% 
   components
 ```
 ```{r components-display, echo = FALSE}
@@ -67,7 +67,7 @@ mdeaths_components <- ets_fit %>%
   components
 mdeaths_components
 mdeaths_components %>% 
-  gather(state, value) %>% 
+  gather(state, value, -.model, -index) %>% 
   ggplot(aes(x = index, y = value)) + 
   geom_line() + 
   facet_grid(state ~ ., scales = "free_y", switch = "y") + 

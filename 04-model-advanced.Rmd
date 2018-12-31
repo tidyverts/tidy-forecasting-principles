@@ -9,7 +9,7 @@ Estimating multiple models is a **key** feature of fable. Most time series can b
 ```{r batch}
 UKLungDeaths %>% 
   gather("sex", "deaths") %>% 
-  ETS(deaths)
+  model(ETS(deaths))
 ```
 
 
