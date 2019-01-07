@@ -14,7 +14,7 @@
   
   
   <meta property="og:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
-  <meta name="github-repo" content="mitchelloharawild/tidy-forecasting-principles" />
+  <meta name="github-repo" content="tidyverts/tidy-forecasting-principles" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Tidy time series forecasting with fable" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-12-31">
+<meta name="date" content="2019-01-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -127,7 +127,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Forecasting with fable</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background"><i class="fa fa-check"></i><b>1.1</b> Background</a></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="tsibble.html"><a href="tsibble.html"><i class="fa fa-check"></i><b>2</b> Tidy time series</a><ul>
 <li class="chapter" data-level="2.1" data-path="tsibble.html"><a href="tsibble.html#ts"><i class="fa fa-check"></i><b>2.1</b> ts</a></li>
 <li class="chapter" data-level="2.2" data-path="tsibble.html"><a href="tsibble.html#tsibble-1"><i class="fa fa-check"></i><b>2.2</b> tsibble</a></li>
@@ -195,12 +197,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Tidy time series forecasting with fable</h1>
 <p class="author"><em>Mitchell O’Hara-Wild</em></p>
-<p class="date"><em>2018-12-31</em></p>
+<p class="date"><em>2019-01-07</em></p>
 </div>
-<div id="background" class="section level1">
-<h1><span class="header-section-number">1</span> Background</h1>
-<p>Collecting these principles in a book-like format is motivated by Max Kuhn’s <a href="https://tidymodels.github.io/model-implementation-principles/">Conventions for R Modeling Packages</a>. The ideas presented in this resource are subject to revision, as the development of these tools are still experimental. This text aims to consolidate the information currently dispersed in the <code>fable</code> package documentation, wiki pages, issues, and emails in a way that is more accessible to the wider community. Hopefully this firstly helps us better design and plan the workflow of tidy forecasting, and invite external opinions to ensure that <code>fable</code> works well with the existing tidy modelling developments.</p>
+<div id="forecasting-with-fable" class="section level1">
+<h1><span class="header-section-number">1</span> Forecasting with fable</h1>
+<p>The <code>fable</code> package is a tidy renovation of the <a href="https://github.com/robjhyndman/forecast/">forecast</a> package, and it explores new interfaces for modelling and subsequent analysis in R. For users experienced with the tidyverse, modelling in R can be a jarring experience. Models in R can be difficult to work with as there is little standardisation in model object structures and interfaces. This is partially alleviated from tidy modelling packages such as <a href="https://github.com/tidymodels/broom/">broom</a> (and <a href="https://github.com/business-science/sweep">sweep</a> for time series) which can be used to extract key features from model objects in suitable formats for tidy workflows.</p>
+<p>The existing integration of modelling and the tidyverse is especially problematic for time series, as the input data structure (ts) is inherently untidy. Much like <a href="https://pkg.earo.me/tsibble/">tsibble</a> implements tidy time series data, the <code>fable</code> package applies tidyverse principles to time series modelling, making the forecasting workflow seamlessly integrate with other <code>tidyverse</code> packages.</p>
+<p>The design choices around <code>fable</code> prioritise the user interface, allowing complicated models to be estimated using common statistical terminology. It intentionally abstracts away from the complications of programming to allow users to focus on the model(s) that they are estimating rather than how they are coding it.</p>
+<div id="background" class="section level2">
+<h2><span class="header-section-number">1.1</span> Background</h2>
+<p>The ideas presented in this resource are subject to revision, as the development of these tools are still experimental. This text aims to consolidate the information currently dispersed in the <code>fable</code> package documentation, wiki pages, issues, and emails in a way that is more accessible to the wider community. Hopefully this firstly helps us better design and plan the workflow of tidy forecasting, and invite external opinions to ensure that <code>fable</code> works well with the existing tidy modelling developments.</p>
 
+</div>
 </div>
             </section>
 

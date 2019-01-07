@@ -13,7 +13,7 @@ ets_fc <- ets_fit %>%
   forecast()
 ets_fc
 ets_fc %>% 
-  autoplot(UKLungDeaths)
+  autoplot(as_tsibble(mdeaths))
 ```
 
 

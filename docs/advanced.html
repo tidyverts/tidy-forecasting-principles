@@ -9,15 +9,15 @@
   <meta name="description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="6 Advanced modelling | Tidy time series forecasting with fable />
+  <meta property="og:title" content="6 Advanced modelling | Tidy time series forecasting with fable" />
   <meta property="og:type" content="book" />
   
   
   <meta property="og:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
-  <meta name="github-repo" content="mitchelloharawild/tidy-forecasting-principles" />
+  <meta name="github-repo" content="tidyverts/tidy-forecasting-principles" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Advanced modelling | Tidy time series forecasting with fable />
+  <meta name="twitter:title" content="6 Advanced modelling | Tidy time series forecasting with fable" />
   
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-12-31">
+<meta name="date" content="2019-01-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -127,7 +127,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Forecasting with fable</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background"><i class="fa fa-check"></i><b>1.1</b> Background</a></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="tsibble.html"><a href="tsibble.html"><i class="fa fa-check"></i><b>2</b> Tidy time series</a><ul>
 <li class="chapter" data-level="2.1" data-path="tsibble.html"><a href="tsibble.html#ts"><i class="fa fa-check"></i><b>2.1</b> ts</a></li>
 <li class="chapter" data-level="2.2" data-path="tsibble.html"><a href="tsibble.html#tsibble-1"><i class="fa fa-check"></i><b>2.2</b> tsibble</a></li>
@@ -201,12 +203,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre class="sourceCode r"><code class="sourceCode r">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">gather</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;deaths&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model</span>(<span class="kw">ETS</span>(deaths))</code></pre>
-<pre><code>## # A mable: 2 models
+<pre><code>## # A mable: 2 x 2
 ## # Key:     sex [2]
 ##   sex     `ETS(deaths)`
 ##   &lt;chr&gt;   &lt;model&gt;      
-## 1 mdeaths ETS(M,A,A)   
-## 2 fdeaths ETS(M,N,M)</code></pre>
+## 1 mdeaths &lt;ETS(M,A,A)&gt; 
+## 2 fdeaths &lt;ETS(M,N,M)&gt;</code></pre>
 </div>
 <div id="decomposition" class="section level2">
 <h2><span class="header-section-number">6.2</span> Decomposition</h2>
@@ -231,7 +233,7 @@ md_decomp</code></pre>
 ##  8 1974 Aug 1593.       -466.      3.69
 ##  9 1974 Sep 1604.       -476.     81.0 
 ## 10 1974 Oct 1615.       -243.    120.  
-## # ... with 62 more rows</code></pre>
+## # … with 62 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/decomp-plot-1.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">md_decomp <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model_components</span>(???)</code></pre>

@@ -6,16 +6,25 @@ site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
 link-citations: yes
-github-repo: mitchelloharawild/tidy-forecasting-principles
+github-repo: tidyverts/tidy-forecasting-principles
 description: "This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting."
 ---
 
-# Background
+# Forecasting with fable
 
-Collecting these principles in a book-like format is motivated by Max Kuhn's [Conventions for R Modeling Packages](https://tidymodels.github.io/model-implementation-principles/). The ideas presented in this resource are subject to revision, as the development of these tools are still experimental. This text aims to consolidate the information currently dispersed in the `fable` package documentation, wiki pages, issues, and emails in a way that is more accessible to the wider community. Hopefully this firstly helps us better design and plan the workflow of tidy forecasting, and invite external opinions to ensure that `fable` works well with the existing tidy modelling developments.
+The `fable` package is a tidy renovation of the [forecast](https://github.com/robjhyndman/forecast/) package, and it explores new interfaces for modelling and subsequent analysis in R. For users experienced with the tidyverse, modelling in R can be a jarring experience. Models in R can be difficult to work with as there is little standardisation in model object structures and interfaces. This is partially alleviated from tidy modelling packages such as [broom](https://github.com/tidymodels/broom/) (and [sweep](https://github.com/business-science/sweep) for time series) which can be used to extract key features from model objects in suitable formats for tidy workflows.
+
+The existing integration of modelling and the tidyverse is especially problematic for time series, as the input data structure (ts) is inherently untidy. Much like [tsibble](https://pkg.earo.me/tsibble/) implements tidy time series data, the `fable` package applies tidyverse principles to time series modelling, making the forecasting workflow seamlessly integrate with other `tidyverse` packages.
+
+The design choices around `fable` prioritise the user interface, allowing complicated models to be estimated using common statistical terminology. It intentionally abstracts away from the complications of programming to allow users to focus on the model(s) that they are estimating rather than how they are coding it.
+
+## Background
+
+The ideas presented in this resource are subject to revision, as the development of these tools are still experimental. This text aims to consolidate the information currently dispersed in the `fable` package documentation, wiki pages, issues, and emails in a way that is more accessible to the wider community. Hopefully this firstly helps us better design and plan the workflow of tidy forecasting, and invite external opinions to ensure that `fable` works well with the existing tidy modelling developments.
 
 ```{r, echo = FALSE, message=FALSE}
 library(tidyverse)
 library(fable)
 library(tsibbledata)
 ```
+

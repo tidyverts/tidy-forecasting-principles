@@ -9,15 +9,15 @@
   <meta name="description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="4 Accessing model elements | Tidy time series forecasting with fable />
+  <meta property="og:title" content="4 Accessing model elements | Tidy time series forecasting with fable" />
   <meta property="og:type" content="book" />
   
   
   <meta property="og:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
-  <meta name="github-repo" content="mitchelloharawild/tidy-forecasting-principles" />
+  <meta name="github-repo" content="tidyverts/tidy-forecasting-principles" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 Accessing model elements | Tidy time series forecasting with fable />
+  <meta name="twitter:title" content="4 Accessing model elements | Tidy time series forecasting with fable" />
   
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2018-12-31">
+<meta name="date" content="2019-01-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -127,7 +127,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Background</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Forecasting with fable</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#background"><i class="fa fa-check"></i><b>1.1</b> Background</a></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="tsibble.html"><a href="tsibble.html"><i class="fa fa-check"></i><b>2</b> Tidy time series</a><ul>
 <li class="chapter" data-level="2.1" data-path="tsibble.html"><a href="tsibble.html#ts"><i class="fa fa-check"></i><b>2.1</b> ts</a></li>
 <li class="chapter" data-level="2.2" data-path="tsibble.html"><a href="tsibble.html#tsibble-1"><i class="fa fa-check"></i><b>2.2</b> tsibble</a></li>
@@ -201,14 +203,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tsibbledata)
 ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model</span>(<span class="kw">ETS</span>(mdeaths))</code></pre>
-<pre><code>## # A mable: 1 model
+<pre><code>## # A mable: 1 x 1
 ##   `ETS(mdeaths)`
 ##   &lt;model&gt;       
-## 1 ETS(M,A,A)</code></pre>
+## 1 &lt;ETS(M,A,A)&gt;</code></pre>
 <p>The summary method can then be used to reveal more information about this model, such as fitted parameters and goodness of fit. Ideally this information would also be standardised into a tabular form for batch modelling, although this is currently not the case.</p>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>summary</code></pre>
-<pre><code>## ETS(M,A,A) 
+<pre><code>## Warning: Unknown or uninitialised column: &#39;method&#39;.</code></pre>
+<pre><code>##  
 ## 
 ##   Smoothing parameters:
 ##     alpha = 0.0002065548 
@@ -247,7 +250,7 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 ##  8 ETS(mdeaths)   1160. 1974 Aug
 ##  9 ETS(mdeaths)   1147. 1974 Sep
 ## 10 ETS(mdeaths)   1381. 1974 Oct
-## # ... with 62 more rows</code></pre>
+## # … with 62 more rows</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>residuals</code></pre>
 <pre><code>## Selecting index: &quot;index&quot;</code></pre>
@@ -265,7 +268,7 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 ##  8 ETS(mdeaths) -0.0248  1974 Aug
 ##  9 ETS(mdeaths)  0.0544  1974 Sep
 ## 10 ETS(mdeaths)  0.0805  1974 Oct
-## # ... with 62 more rows</code></pre>
+## # … with 62 more rows</code></pre>
 </div>
 <div id="broom-functionality" class="section level2">
 <h2><span class="header-section-number">4.3</span> Broom functionality</h2>
@@ -286,16 +289,15 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 ##  8 ETS(mdeaths) 1974 Aug    1131   1160. -0.0248 
 ##  9 ETS(mdeaths) 1974 Sep    1209   1147.  0.0544 
 ## 10 ETS(mdeaths) 1974 Oct    1492   1381.  0.0805 
-## # ... with 62 more rows</code></pre>
+## # … with 62 more rows</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>tidy</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>glance</code></pre>
-<pre><code>## # A tibble: 1 x 11
-##   .model method formula period  sigma logLik   AIC  AICc   BIC    MSE
-##   &lt;chr&gt;  &lt;chr&gt;  &lt;list&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-## 1 ETS(m… ETS(M… &lt;sym&gt;       12 0.0951  -500. 1033. 1045. 1072. 24137.
-## # ... with 1 more variable: AMSE &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 1 x 8
+##   .model        sigma logLik   AIC  AICc   BIC    MSE   AMSE
+##   &lt;chr&gt;         &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 ETS(mdeaths) 0.0951  -500. 1033. 1045. 1072. 24137. 23441.</code></pre>
 </div>
 <div id="components" class="section level2">
 <h2><span class="header-section-number">4.4</span> Components</h2>
@@ -318,7 +320,7 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 ##  8 ETS(mdeaths) 1974 Aug 1640. -4.48  -370.
 ##  9 ETS(mdeaths) 1974 Sep 1636. -4.48  -476.
 ## 10 ETS(mdeaths) 1974 Oct 1632. -4.47  -485.
-## # ... with 63 more rows</code></pre>
+## # … with 63 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/components-display-1.png" width="672" /></p>
 <p>It may also be worth storing how these components can be used to produce the response, which can be used for <a href="https://mitchelloharawild.github.io/tidy-forecasting-principles/advanced.html#decomposition">decomposition modelling</a>.</p>
 

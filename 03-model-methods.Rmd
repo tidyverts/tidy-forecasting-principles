@@ -60,7 +60,7 @@ The refitted model should maintain the same structure and coefficients of the or
 It is expected that a refit method uses a fitted model and replacement data to return a mable.
 
 For the ETS model for `mdeaths` estimated above:
-```{r ets-mdeaths, eval = FALSE}
+```{r ets-mdeaths}
 library(fable)
 ets_fit <- as_tsibble(mdeaths) %>% 
   model(ETS(value))
