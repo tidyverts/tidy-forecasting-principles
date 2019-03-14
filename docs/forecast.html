@@ -22,10 +22,9 @@
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
 
-<meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2019-01-07">
+<meta name="date" content="2019-03-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -201,7 +200,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre class="sourceCode r"><code class="sourceCode r">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model</span>(<span class="kw">ETS</span>(mdeaths)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">forecast</span>()</code></pre>
-<pre><code>## Selecting index: &quot;index&quot;</code></pre>
+<pre><code>## Called from: forecast.mdl_df(.)
+## debug at /home/mitchell/github/fablelite/R/forecast.R#39: out &lt;- suppressWarnings(unnest(out, fc, key = keys))
+## debug at /home/mitchell/github/fablelite/R/forecast.R#40: out[[expr_text(fc[[1]] %@% &quot;dist&quot;)]] &lt;- fc %&gt;% map(function(x) x[[expr_text(x %@% 
+##     &quot;dist&quot;)]]) %&gt;% invoke(c, .)
+## debug at /home/mitchell/github/fablelite/R/forecast.R#41: as_fable(out, resp = !!(fc[[1]] %@% &quot;response&quot;), dist = !!(fc[[1]] %@% 
+##     &quot;dist&quot;))</code></pre>
 <pre><code>## # A fable: 24 x 4 [1M]
 ## # Key:     .model [1]
 ##    .model        index value .distribution 

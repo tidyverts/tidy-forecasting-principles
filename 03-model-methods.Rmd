@@ -76,16 +76,19 @@ refit(ets_fit, as_tsibble(fdeaths))
 
 Streaming data into a model allows a model to be extended to accomodate new, future data. Like `refit`, `stream` should allow re-estimation of the model parameters. As this can be a costly operation for some models, in most cases updating the parameters should not occur. However it is recommended that the model parameters are updated on a regular basis.
 
-Suppose we are estimating electricity demand data (`tsibbledata::elecdemand`), and after fitting a model to the existing data, a new set of data from the next month becomes available.
+Suppose we are estimating electricity demand data (`tsibbledata::aus_elec`), and after fitting a model to the existing data, a new set of data from the next month becomes available.
 
 ```{r stream-tsplot, echo = FALSE}
 library(fasster)
 library(lubridate)
-elec_tr <- tsibbledata::elecdemand %>% 
-  filter(index < ymd("2014-12-01"), index >= ymd("2014-09-01"))
-elec_stream <- tsibbledata::elecdemand %>% 
-  filter(index >= ymd("2014-12-01"))
-ggplot(NULL, aes(x = index, y = Demand)) + 
+elec_tr <- tsibbledata::aus_elec %>% 
+  filter(
+    State == "Victoria",
+    Time < ymd("2014-12-01"), Time >= ymd("2014-09-01")
+  )
+elec_stream <- tsibbledata::aus_elec %>% 
+  filter(State == "Victoria", Time >= ymd("2014-12-01"))
+ggplot(NULL, aes(x = Time, y = Demand)) + 
   geom_line(aes(colour = "Existing (elec_tr)"), data = elec_tr) + 
   geom_line(aes(colour = "New (elec_stream)"), data = elec_stream) + 
   theme_minimal() + 
@@ -98,10 +101,10 @@ A (minimal) model for the electricity demand above can be estimated using [fasst
 
 ```{r stream-fit, cache=TRUE}
 fit <- elec_tr %>% 
-  model(fasster = fasster(Demand ~ WorkDay %S% (poly(1) + trig(10))))
+  model(fasster = fasster(Demand ~ Holiday %S% (poly(1) + trig(10))))
 ```
 ```{r stream-fit-plot, echo = FALSE}
-ggplot(NULL, aes(x = index, y = Demand)) + 
+ggplot(NULL, aes(x = Time, y = Demand)) + 
   geom_line(data = elec_tr %>% mutate(facet = "Actual")) +
   geom_line(aes(y = .fitted), data = fitted(fit) %>% mutate(facet = "Fitted")) + 
   facet_grid(facet ~ .) +
@@ -115,7 +118,7 @@ fit <- fit %>%
   stream(elec_stream)
 ```
 ```{r stream-plot, echo = FALSE}
-ggplot(NULL, aes(x = index, y = Demand)) + 
+ggplot(NULL, aes(x = Time, y = Demand)) + 
   geom_line(data = elec_tr %>% mutate(facet = "Actual")) +
   geom_line(data = elec_stream %>% mutate(facet = "Actual")) +
   geom_line(aes(y = .fitted), data = fitted(fit) %>% mutate(facet = "Fitted")) + 
@@ -126,9 +129,9 @@ ggplot(NULL, aes(x = index, y = Demand)) +
 
 ## Simulation
 
-Much like the [tidymodels opinion](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) toward `predict`, `simulate` should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.
+Much like the [tidymodels opinion](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) toward `predict`, `imitate` should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.
 
-The simulate method for a fable model should accept these arguments (names chosen for consistency with `tidymodels`):
+The imitate method for a fable model should accept these arguments (names chosen for consistency with `tidymodels`):
 
 * object: The model itself
 * new_data: The data used for simulation
@@ -156,7 +159,7 @@ library(fable)
 library(tsibbledata)
 UKLungDeaths %>% 
   model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
-  simulate(UKLungDeaths, times = 5)
+  imitate(UKLungDeaths, times = 5)
 ```
 
 ```{r sim-example-eval, echo = FALSE, cache = TRUE}
@@ -164,7 +167,7 @@ library(fable)
 library(tsibbledata)
 sim1 <- UKLungDeaths %>% 
   model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
-  simulate(UKLungDeaths, times = 5)
+  imitate(UKLungDeaths, times = 5)
 sim1
 library(ggplot2)
 ggplot(UKLungDeaths, aes(x = index, y = mdeaths)) + 
@@ -174,14 +177,14 @@ ggplot(UKLungDeaths, aes(x = index, y = mdeaths)) +
 ```
 
 
-Or, to simulate beyond the sample:
+Or, to imitate beyond the sample:
 
 ```{r sim-future, eval = FALSE}
 library(lubridate)
 UKLungDeaths %>% 
   filter(year(index) <= 1978) %>% 
   model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
-  simulate(
+  imitate(
     UKLungDeaths %>% filter(year(index) > 1978),
     times = 5
   )
@@ -191,7 +194,7 @@ library(lubridate)
 sim2 <- UKLungDeaths %>% 
   filter(year(index) <= 1978) %>% 
   model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
-  simulate(
+  imitate(
     UKLungDeaths %>% filter(year(index) > 1978),
     times = 5
   )

@@ -8,6 +8,7 @@ As fable naturally supports batch/multiple forecasting, the print method is stan
 
 ```{r ets-fit}
 library(tsibbledata)
+UKLungDeaths <- as_tsibble(cbind(mdeaths, fdeaths), gather = FALSE)
 ets_fit <- UKLungDeaths %>% 
   model(ETS(mdeaths))
 ```

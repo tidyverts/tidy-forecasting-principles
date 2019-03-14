@@ -21,7 +21,7 @@ Objects which support a `components` method can then have their components model
 The user should be able to specify how each of the components are modelled, and the `components` method should define how each component is combined (and perhaps some default models that can be used).
 
 ```{r decomp}
-library(tsibblestats)
+library(feasts)
 md_decomp <- UKLungDeaths %>%
   STL(mdeaths ~ season(window = 12))
 md_decomp

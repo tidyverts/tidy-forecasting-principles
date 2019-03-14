@@ -22,10 +22,9 @@
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
 
-<meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2019-01-07">
+<meta name="date" content="2019-03-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -215,24 +214,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><a href="https://github.com/tidyverts/fable/wiki/Combining-models" class="uri">https://github.com/tidyverts/fable/wiki/Combining-models</a></p>
 <p>Objects which support a <code>components</code> method can then have their components modelled separately. The working name for this functionality is <code>model_components</code>, however a shorter (single word) verb is preferred.</p>
 <p>The user should be able to specify how each of the components are modelled, and the <code>components</code> method should define how each component is combined (and perhaps some default models that can be used).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tsibblestats)
-md_decomp &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(feasts)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;feasts&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:grDevices&#39;:
+## 
+##     X11</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">md_decomp &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">STL</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">season</span>(<span class="dt">window =</span> <span class="dv">12</span>))
 md_decomp</code></pre>
-<pre><code>## # A dable:       72 x 4 [1M]
-## # Decomposition: mdeaths = trend + season_year + remainder
-##       index trend season_year remainder
-##       &lt;mth&gt; &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
-##  1 1974 Jan 1510.        594.     30.0 
-##  2 1974 Feb 1523.        581.   -241.  
-##  3 1974 Mar 1536.        469.   -127.  
-##  4 1974 Apr 1549.        163.    165.  
-##  5 1974 May 1560.       -193.    124.  
-##  6 1974 Jun 1571.       -317.     -5.09
-##  7 1974 Jul 1583.       -366.     63.4 
-##  8 1974 Aug 1593.       -466.      3.69
-##  9 1974 Sep 1604.       -476.     81.0 
-## 10 1974 Oct 1615.       -243.    120.  
+<pre><code>## # A dable:           72 x 6 [1M]
+## # STL Decomposition: mdeaths = trend + season_year + remainder
+##       index mdeaths trend season_year remainder seas_adjust
+##       &lt;mth&gt;   &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+##  1 1974 Jan    2134 1510.        594.     30.0        1540.
+##  2 1974 Feb    1863 1523.        581.   -241.         1282.
+##  3 1974 Mar    1877 1536.        469.   -127.         1408.
+##  4 1974 Apr    1877 1549.        163.    165.         1714.
+##  5 1974 May    1492 1560.       -193.    124.         1685.
+##  6 1974 Jun    1249 1571.       -317.     -5.09       1566.
+##  7 1974 Jul    1280 1583.       -366.     63.4        1646.
+##  8 1974 Aug    1131 1593.       -466.      3.69       1597.
+##  9 1974 Sep    1209 1604.       -476.     81.0        1685.
+## 10 1974 Oct    1492 1615.       -243.    120.         1735.
 ## # … with 62 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/decomp-plot-1.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r">md_decomp <span class="op">%&gt;%</span><span class="st"> </span>

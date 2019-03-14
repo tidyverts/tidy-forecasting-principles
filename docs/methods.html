@@ -22,10 +22,9 @@
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
 
-<meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2019-01-07">
+<meta name="date" content="2019-03-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -240,40 +239,58 @@ ets_fit &lt;-<span class="st"> </span><span class="kw">as_tsibble</span>(mdeaths
 <span class="st">  </span><span class="kw">model</span>(<span class="kw">ETS</span>(value))</code></pre>
 <p>We may be interested in using the same model with the same coefficients to estimate the <code>fdeaths</code> series:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">refit</span>(ets_fit, <span class="kw">as_tsibble</span>(fdeaths))</code></pre>
+<pre><code>## Called from: refit.ETS(object[[&quot;fit&quot;]], new_data, specials = specials, ...)
+## debug at /home/mitchell/github/fable/R/ets.R#372: if (!reinitialise) {
+##     abort(&quot;Using initial paramaters is currently not implemented.&quot;)
+## }
+## debug at /home/mitchell/github/fable/R/ets.R#376: y &lt;- new_data %&gt;% transmute(!!parse_expr(measured_vars(object$est)[1]))
+## debug at /home/mitchell/github/fable/R/ets.R#380: idx &lt;- y[[expr_text(index(y))]]
+## debug at /home/mitchell/github/fable/R/ets.R#382: best &lt;- etsmodel(y[[measured_vars(y)]], m = object$spec$period, 
+##     errortype = object$spec$errortype, trendtype = object$spec$trendtype, 
+##     seasontype = object$spec$seasontype, damped = object$spec$damped, 
+##     alpha = est_par(&quot;alpha&quot;), beta = est_par(&quot;beta&quot;), phi = est_par(&quot;phi&quot;), 
+##     gamma = est_par(&quot;gamma&quot;), alpharange = c(1e-04, 0.9999), 
+##     betarange = c(1e-04, 0.9999), gammarange = c(1e-04, 0.9999), 
+##     phirange = c(0.8, 0.98), opt.crit = &quot;lik&quot;, nmse = 3, bounds = &quot;both&quot;)
+## debug at /home/mitchell/github/fable/R/ets.R#391: structure(list(par = tibble(term = names(best$par), estimate = best$par), 
+##     est = mutate(y, .fitted = best$fitted, .resid = best$residuals), 
+##     fit = tibble(sigma = sqrt(sum(best$residuals^2, na.rm = TRUE)/(NROW(y) - 
+##         length(best$par))), logLik = best$loglik, AIC = best$aic, 
+##         AICc = best$aicc, BIC = best$bic, MSE = best$mse, AMSE = best$amse, 
+##         MAE = best$mae), states = tsibble(!!!set_names(list(seq(idx[[1]] - 
+##         time_unit(interval(new_data)), by = time_unit(interval(new_data)), 
+##         length.out = NROW(best$states))), expr_text(index(new_data))), 
+##         !!!set_names(split(best$states, col(best$states)), colnames(best$states)), 
+##         index = !!index(new_data)), spec = object$spec), class = &quot;ETS&quot;)</code></pre>
 <pre><code>## # A mable: 1 x 1
 ##   `ETS(value)`
 ##   &lt;model&gt;     
-## 1 &lt;S3: ETS&gt;</code></pre>
+## 1 &lt;ETS(M,A,A)&gt;</code></pre>
 </div>
 <div id="stream" class="section level3">
 <h3><span class="header-section-number">5.2.2</span> stream()</h3>
 <p>Streaming data into a model allows a model to be extended to accomodate new, future data. Like <code>refit</code>, <code>stream</code> should allow re-estimation of the model parameters. As this can be a costly operation for some models, in most cases updating the parameters should not occur. However it is recommended that the model parameters are updated on a regular basis.</p>
-<p>Suppose we are estimating electricity demand data (<code>tsibbledata::elecdemand</code>), and after fitting a model to the existing data, a new set of data from the next month becomes available.</p>
+<p>Suppose we are estimating electricity demand data (<code>tsibbledata::aus_elec</code>), and after fitting a model to the existing data, a new set of data from the next month becomes available.</p>
 <pre><code>## 
 ## Attaching package: &#39;lubridate&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:tsibble&#39;:
-## 
-##     interval, new_interval</code></pre>
 <pre><code>## The following object is masked from &#39;package:base&#39;:
 ## 
 ##     date</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/stream-tsplot-1.png" width="672" /></p>
 <p>A (minimal) model for the electricity demand above can be estimated using <a href="https://github.com/tidyverts/fasster">fasster</a>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span>elec_tr <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">model</span>(<span class="dt">fasster =</span> <span class="kw">fasster</span>(Demand <span class="op">~</span><span class="st"> </span>WorkDay <span class="op">%S%</span><span class="st"> </span>(<span class="kw">poly</span>(<span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">trig</span>(<span class="dv">10</span>))))</code></pre>
-<pre><code>## Selecting index: &quot;index&quot;</code></pre>
+<span class="st">  </span><span class="kw">model</span>(<span class="dt">fasster =</span> <span class="kw">fasster</span>(Demand <span class="op">~</span><span class="st"> </span>Holiday <span class="op">%S%</span><span class="st"> </span>(<span class="kw">poly</span>(<span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">trig</span>(<span class="dv">10</span>))))</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/stream-fit-plot-1.png" width="672" /></p>
 <p>To extend these fitted values to include December’s electricity data, we can use the <code>stream</code> functionality:</p>
 <pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span>fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">stream</span>(elec_stream)</code></pre>
-<pre><code>## Selecting index: &quot;index&quot;</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/stream-plot-1.png" width="672" /></p>
 </div>
 </div>
 <div id="simulation" class="section level2">
 <h2><span class="header-section-number">5.3</span> Simulation</h2>
-<p>Much like the <a href="https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data">tidymodels opinion</a> toward <code>predict</code>, <code>simulate</code> should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.</p>
-<p>The simulate method for a fable model should accept these arguments (names chosen for consistency with <code>tidymodels</code>):</p>
+<p>Much like the <a href="https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data">tidymodels opinion</a> toward <code>predict</code>, <code>imitate</code> should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.</p>
+<p>The imitate method for a fable model should accept these arguments (names chosen for consistency with <code>tidymodels</code>):</p>
 <ul>
 <li>object: The model itself</li>
 <li>new_data: The data used for simulation</li>
@@ -282,64 +299,75 @@ ets_fit &lt;-<span class="st"> </span><span class="kw">as_tsibble</span>(mdeaths
 </ul>
 <p>The <code>new_data</code> dataset extends existing <code>stats::simulate</code> functionality by allowing the simulation to accept a new time index for simulating beyond the sample (<code>.idx</code>), and allows the simulation to work with a new set of exogenous regressors (say <code>x1</code> and <code>x2</code>).</p>
 <p>It is expected that the innovations (<code>.innov</code>) for the simulation are randomly generated for each repition number (<code>rep</code>), which can be achieved using the <code>times</code> argument. However, users should also be able to provide a set of pre-generated innovations (<code>.innov</code>) for each repition (<code>.rep</code>). If these columns are provided in the <code>new_data</code>, then this data will be passed directly to the simulation method (without generating new numbers over <code>times</code> replications).</p>
+<pre><code>## 
+## Attaching package: &#39;tsibble&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:lubridate&#39;:
+## 
+##     interval, new_interval</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     id</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
 <pre><code>## # A tsibble: 9 x 5 [1M]
 ## # Key:       .rep [3]
-##    .rep     .idx  .innov      x1     x2
-##   &lt;int&gt;    &lt;mth&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-## 1     1 2017 Jan -0.636   1.04   -2.23 
-## 2     1 2017 Feb  1.41    0.842  -2.06 
-## 3     1 2017 Mar  1.90    0.813  -1.25 
-## 4     2 2017 Jan  0.0988  3.68   -2.99 
-## 5     2 2017 Feb  2.21   -0.0779 -2.95 
-## 6     2 2017 Mar -0.422  -0.292  -1.33 
-## 7     3 2017 Jan -1.00    3.08   -2.01 
-## 8     3 2017 Feb -0.810   2.27   -0.148
-## 9     3 2017 Mar -0.992   5.65   -2.35</code></pre>
+##    .rep     .idx  .innov    x1     x2
+##   &lt;int&gt;    &lt;mth&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1     1 2017 Jan -0.586   3.12 -1.99 
+## 2     1 2017 Feb -0.0566  4.27 -1.98 
+## 3     1 2017 Mar  0.941   4.08 -1.39 
+## 4     2 2017 Jan -0.522  -1.01 -1.06 
+## 5     2 2017 Feb  0.231   2.61 -2.51 
+## 6     2 2017 Mar  0.731   1.03 -2.21 
+## 7     3 2017 Jan -0.994   2.87 -0.908
+## 8     3 2017 Feb -0.877   3.02 -3.64 
+## 9     3 2017 Mar  0.933   1.91 -3.10</code></pre>
 <p>For the end user, creating simulations would work like this:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fable)
 <span class="kw">library</span>(tsibbledata)
 UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model</span>(<span class="dt">lm =</span> <span class="kw">TSLM</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">fourier</span>(<span class="st">&quot;year&quot;</span>, <span class="dt">K =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span>fdeaths)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">simulate</span>(UKLungDeaths, <span class="dt">times =</span> <span class="dv">5</span>)</code></pre>
-<pre><code>## # A tsibble: 360 x 4 [1D]
+<span class="st">  </span><span class="kw">imitate</span>(UKLungDeaths, <span class="dt">times =</span> <span class="dv">5</span>)</code></pre>
+<pre><code>## # A tsibble: 360 x 4 [1M]
 ## # Key:       .rep, .model [5]
-##    .model index       .rep  .sim
-##    &lt;chr&gt;  &lt;date&gt;     &lt;int&gt; &lt;dbl&gt;
-##  1 lm     1974-01-01     1 2308.
-##  2 lm     1974-02-01     1 1745.
-##  3 lm     1974-03-01     1 2172.
-##  4 lm     1974-04-01     1 1726.
-##  5 lm     1974-05-01     1 1345.
-##  6 lm     1974-06-01     1 1035.
-##  7 lm     1974-07-01     1 1276.
-##  8 lm     1974-08-01     1 1086.
-##  9 lm     1974-09-01     1 1071.
-## 10 lm     1974-10-01     1 1425.
-## # ... with 350 more rows</code></pre>
+##    .model  .rep    index  .sim
+##    &lt;chr&gt;  &lt;int&gt;    &lt;mth&gt; &lt;dbl&gt;
+##  1 lm         1 1974 Jan 2393.
+##  2 lm         1 1974 Feb 1677.
+##  3 lm         1 1974 Mar 1997.
+##  4 lm         1 1974 Apr 1734.
+##  5 lm         1 1974 May 1343.
+##  6 lm         1 1974 Jun 1270.
+##  7 lm         1 1974 Jul 1265.
+##  8 lm         1 1974 Aug  960.
+##  9 lm         1 1974 Sep 1045.
+## 10 lm         1 1974 Oct 1567.
+## # … with 350 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/sim-example-eval-1.png" width="672" /></p>
-<p>Or, to simulate beyond the sample:</p>
+<p>Or, to imitate beyond the sample:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)
 UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">year</span>(index) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1978</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model</span>(<span class="dt">lm =</span> <span class="kw">TSLM</span>(mdeaths <span class="op">~</span><span class="st"> </span><span class="kw">fourier</span>(<span class="st">&quot;year&quot;</span>, <span class="dt">K =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span>fdeaths)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">simulate</span>(
+<span class="st">  </span><span class="kw">imitate</span>(
     UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">year</span>(index) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1978</span>),
     <span class="dt">times =</span> <span class="dv">5</span>
   )</code></pre>
-<pre><code>## # A tsibble: 60 x 4 [1D]
+<pre><code>## # A tsibble: 60 x 4 [1M]
 ## # Key:       .rep, .model [5]
-##    .model index       .rep  .sim
-##    &lt;chr&gt;  &lt;date&gt;     &lt;int&gt; &lt;dbl&gt;
-##  1 lm     1979-01-01     1 2206.
-##  2 lm     1979-02-01     1 2151.
-##  3 lm     1979-03-01     1 2006.
-##  4 lm     1979-04-01     1 1706.
-##  5 lm     1979-05-01     1 1216.
-##  6 lm     1979-06-01     1 1171.
-##  7 lm     1979-07-01     1 1170.
-##  8 lm     1979-08-01     1 1061.
-##  9 lm     1979-09-01     1 1089.
-## 10 lm     1979-10-01     1 1129.
+##    .model  .rep    index  .sim
+##    &lt;chr&gt;  &lt;int&gt;    &lt;mth&gt; &lt;dbl&gt;
+##  1 lm         1 1979 Jan 2198.
+##  2 lm         1 1979 Feb 1965.
+##  3 lm         1 1979 Mar 1874.
+##  4 lm         1 1979 Apr 1714.
+##  5 lm         1 1979 May 1260.
+##  6 lm         1 1979 Jun 1219.
+##  7 lm         1 1979 Jul 1177.
+##  8 lm         1 1979 Aug 1073.
+##  9 lm         1 1979 Sep  897.
+## 10 lm         1 1979 Oct 1125.
 ## # … with 50 more rows</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/sim-future-eval-1.png" width="672" /></p>
 </div>

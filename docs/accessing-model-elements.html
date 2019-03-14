@@ -22,10 +22,9 @@
   <meta name="twitter:description" content="This is an outline of principles used by fable that acts as a guide for building tidy tools for forecasting." />
   
 
-<meta name="author" content="Mitchell O’Hara-Wild">
 
 
-<meta name="date" content="2019-01-07">
+<meta name="date" content="2019-03-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -201,6 +200,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The <code>print</code> and <code>summary</code> methods are standard displays for fitted models. The <code>print</code> method typically displays a limited amount of key information, such as the model that was fit, and the estimated coefficients. The <code>summary</code> function extends the <code>print</code> method with a more detailed summary of fit, which may include measures for goodness of fit, and significance of model terms.</p>
 <p>As fable naturally supports batch/multiple forecasting, the print method is standardised for any number of models. A very short model specific display can be defined using the <code>model_sum</code> generic, which is shown in the mable.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tsibbledata)
+UKLungDeaths &lt;-<span class="st"> </span><span class="kw">as_tsibble</span>(<span class="kw">cbind</span>(mdeaths, fdeaths), <span class="dt">gather =</span> <span class="ot">FALSE</span>)
 ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model</span>(<span class="kw">ETS</span>(mdeaths))</code></pre>
 <pre><code>## # A mable: 1 x 1
@@ -210,64 +210,111 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 <p>The summary method can then be used to reveal more information about this model, such as fitted parameters and goodness of fit. Ideally this information would also be standardised into a tabular form for batch modelling, although this is currently not the case.</p>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>summary</code></pre>
-<pre><code>## Warning: Unknown or uninitialised column: &#39;method&#39;.</code></pre>
-<pre><code>##  
+<pre><code>## $par
+## # A tibble: 16 x 2
+##    term      estimate
+##    &lt;chr&gt;        &lt;dbl&gt;
+##  1 alpha     0.000207
+##  2 beta      0.000187
+##  3 gamma     0.000118
+##  4 l      1672.      
+##  5 b        -4.33    
+##  6 s0      373.      
+##  7 s1     -121.      
+##  8 s2     -246.      
+##  9 s3     -485.      
+## 10 s4     -476.      
+## 11 s5     -370.      
+## 12 s6     -304.      
+## 13 s7     -207.      
+## 14 s8      122.      
+## 15 s9      483.      
+## 16 s10     620.      
 ## 
-##   Smoothing parameters:
-##     alpha = 0.0002065548 
-##     beta  = 0.0001865257 
-##     gamma = 0.000118306 
+## $est
+## # A tsibble: 72 x 4 [1M]
+##       index mdeaths .fitted   .resid
+##       &lt;mth&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1 1974 Jan    2134   2278. -0.0633 
+##  2 1974 Feb    1863   2283. -0.184  
+##  3 1974 Mar    1877   2142. -0.124  
+##  4 1974 Apr    1877   1776.  0.0569 
+##  5 1974 May    1492   1442.  0.0346 
+##  6 1974 Jun    1249   1341. -0.0689 
+##  7 1974 Jul    1280   1270.  0.00764
+##  8 1974 Aug    1131   1160. -0.0248 
+##  9 1974 Sep    1209   1147.  0.0544 
+## 10 1974 Oct    1492   1381.  0.0805 
+## # … with 62 more rows
 ## 
-##   Initial states:
-##         l         b       s1        s2        s3        s4        s5
-##  1671.676 -4.334248 373.1746 -121.3157 -246.1697 -484.8581 -476.2192
-##         s6        s7       s8       s9      s10      s11      s12
-##  -370.1939 -303.5806 -207.384 122.0022 483.3319 620.3601 610.8525
+## $fit
+## # A tibble: 1 x 8
+##    sigma logLik   AIC  AICc   BIC    MSE   AMSE    MAE
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.0951  -500. 1033. 1045. 1072. 24137. 23441. 0.0657
 ## 
+## $states
+## # A tsibble: 73 x 15 [1M]
+##         index     l     b    s1    s2    s3    s4    s5    s6    s7    s8
+##         &lt;mth&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1   1973 Dec 1672. -4.33  373. -121. -246. -485. -476. -370. -304. -207.
+##  2   1974 Jan 1667. -4.36  611.  373. -121. -246. -485. -476. -370. -304.
+##  3   1974 Feb 1663. -4.44  620.  611.  373. -121. -246. -485. -476. -370.
+##  4   1974 Mar 1658. -4.49  483.  620.  611.  373. -121. -246. -485. -476.
+##  5   1974 Apr 1654. -4.47  122.  483.  620.  611.  373. -121. -246. -485.
+##  6   1974 May 1649. -4.46 -207.  122.  483.  620.  611.  373. -121. -246.
+##  7   1974 Jun 1645. -4.48 -304. -207.  122.  483.  620.  611.  373. -121.
+##  8   1974 Jul 1640. -4.48 -370. -304. -207.  122.  483.  620.  611.  373.
+##  9   1974 Aug 1636. -4.48 -476. -370. -304. -207.  122.  483.  620.  611.
+## 10   1974 Sep 1632. -4.47 -485. -476. -370. -304. -207.  122.  483.  620.
+## # … with 63 more rows, and 4 more variables: s9 &lt;dbl&gt;, s10 &lt;dbl&gt;,
+## #   s11 &lt;dbl&gt;, s12 &lt;dbl&gt;
 ## 
-##   sigma:  0.0951
+## $spec
+## # A tibble: 1 x 5
+##   errortype trendtype seasontype damped period
+##   &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;      &lt;lgl&gt;   &lt;dbl&gt;
+## 1 M         A         A          FALSE      12
 ## 
-##      AIC     AICc      BIC 
-## 1033.474 1044.807 1072.177</code></pre>
+## attr(,&quot;class&quot;)
+## [1] &quot;ETS&quot;</code></pre>
 </div>
 <div id="fitted-values-and-residuals" class="section level2">
 <h2><span class="header-section-number">4.2</span> Fitted values and residuals</h2>
 <p>Accessors for fitted values and residuals return a tsibble containing the index from the original data, with a measured variables for <code>.fitted</code> values and <code>.resids</code>. If the mable contains more than one model, the resulting object maintains and respects the key structure.</p>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>fitted</code></pre>
-<pre><code>## Selecting index: &quot;index&quot;</code></pre>
 <pre><code>## # A tsibble: 72 x 3 [1M]
 ## # Key:       .model [1]
-##    .model       .fitted    index
-##    &lt;chr&gt;          &lt;dbl&gt;    &lt;mth&gt;
-##  1 ETS(mdeaths)   2278. 1974 Jan
-##  2 ETS(mdeaths)   2283. 1974 Feb
-##  3 ETS(mdeaths)   2142. 1974 Mar
-##  4 ETS(mdeaths)   1776. 1974 Apr
-##  5 ETS(mdeaths)   1442. 1974 May
-##  6 ETS(mdeaths)   1341. 1974 Jun
-##  7 ETS(mdeaths)   1270. 1974 Jul
-##  8 ETS(mdeaths)   1160. 1974 Aug
-##  9 ETS(mdeaths)   1147. 1974 Sep
-## 10 ETS(mdeaths)   1381. 1974 Oct
+##    .model          index .fitted
+##    &lt;chr&gt;           &lt;mth&gt;   &lt;dbl&gt;
+##  1 ETS(mdeaths) 1974 Jan   2278.
+##  2 ETS(mdeaths) 1974 Feb   2283.
+##  3 ETS(mdeaths) 1974 Mar   2142.
+##  4 ETS(mdeaths) 1974 Apr   1776.
+##  5 ETS(mdeaths) 1974 May   1442.
+##  6 ETS(mdeaths) 1974 Jun   1341.
+##  7 ETS(mdeaths) 1974 Jul   1270.
+##  8 ETS(mdeaths) 1974 Aug   1160.
+##  9 ETS(mdeaths) 1974 Sep   1147.
+## 10 ETS(mdeaths) 1974 Oct   1381.
 ## # … with 62 more rows</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>residuals</code></pre>
-<pre><code>## Selecting index: &quot;index&quot;</code></pre>
 <pre><code>## # A tsibble: 72 x 3 [1M]
 ## # Key:       .model [1]
-##    .model         .resid    index
-##    &lt;chr&gt;           &lt;dbl&gt;    &lt;mth&gt;
-##  1 ETS(mdeaths) -0.0633  1974 Jan
-##  2 ETS(mdeaths) -0.184   1974 Feb
-##  3 ETS(mdeaths) -0.124   1974 Mar
-##  4 ETS(mdeaths)  0.0569  1974 Apr
-##  5 ETS(mdeaths)  0.0346  1974 May
-##  6 ETS(mdeaths) -0.0689  1974 Jun
-##  7 ETS(mdeaths)  0.00764 1974 Jul
-##  8 ETS(mdeaths) -0.0248  1974 Aug
-##  9 ETS(mdeaths)  0.0544  1974 Sep
-## 10 ETS(mdeaths)  0.0805  1974 Oct
+##    .model          index   .resid
+##    &lt;chr&gt;           &lt;mth&gt;    &lt;dbl&gt;
+##  1 ETS(mdeaths) 1974 Jan -0.0633 
+##  2 ETS(mdeaths) 1974 Feb -0.184  
+##  3 ETS(mdeaths) 1974 Mar -0.124  
+##  4 ETS(mdeaths) 1974 Apr  0.0569 
+##  5 ETS(mdeaths) 1974 May  0.0346 
+##  6 ETS(mdeaths) 1974 Jun -0.0689 
+##  7 ETS(mdeaths) 1974 Jul  0.00764
+##  8 ETS(mdeaths) 1974 Aug -0.0248 
+##  9 ETS(mdeaths) 1974 Sep  0.0544 
+## 10 ETS(mdeaths) 1974 Oct  0.0805 
 ## # … with 62 more rows</code></pre>
 </div>
 <div id="broom-functionality" class="section level2">
@@ -294,10 +341,10 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 <span class="st">  </span>tidy</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>glance</code></pre>
-<pre><code>## # A tibble: 1 x 8
-##   .model        sigma logLik   AIC  AICc   BIC    MSE   AMSE
-##   &lt;chr&gt;         &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 ETS(mdeaths) 0.0951  -500. 1033. 1045. 1072. 24137. 23441.</code></pre>
+<pre><code>## # A tibble: 1 x 9
+##   .model        sigma logLik   AIC  AICc   BIC    MSE   AMSE    MAE
+##   &lt;chr&gt;         &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 ETS(mdeaths) 0.0951  -500. 1033. 1045. 1072. 24137. 23441. 0.0657</code></pre>
 </div>
 <div id="components" class="section level2">
 <h2><span class="header-section-number">4.4</span> Components</h2>
@@ -306,21 +353,24 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 <pre class="sourceCode r"><code class="sourceCode r">UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model</span>(<span class="kw">ETS</span>(mdeaths)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>components</code></pre>
-<pre><code>## # A tsibble: 73 x 5 [1M]
-## # Key:       .model [1]
-##    .model          index level slope season
-##    &lt;chr&gt;           &lt;mth&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-##  1 ETS(mdeaths) 1974 Jan 1672. -4.33   373.
-##  2 ETS(mdeaths) 1974 Feb 1667. -4.36   611.
-##  3 ETS(mdeaths) 1974 Mar 1663. -4.44   620.
-##  4 ETS(mdeaths) 1974 Apr 1658. -4.49   483.
-##  5 ETS(mdeaths) 1974 May 1654. -4.47   122.
-##  6 ETS(mdeaths) 1974 Jun 1649. -4.46  -207.
-##  7 ETS(mdeaths) 1974 Jul 1645. -4.48  -304.
-##  8 ETS(mdeaths) 1974 Aug 1640. -4.48  -370.
-##  9 ETS(mdeaths) 1974 Sep 1636. -4.48  -476.
-## 10 ETS(mdeaths) 1974 Oct 1632. -4.47  -485.
-## # … with 63 more rows</code></pre>
+<pre><code>## # A dable:                  84 x 7 [1M]
+## # Key:                      .model [1]
+## # ETS(M,A,A) Decomposition: mdeaths = (lag(level, 1) + lag(slope, 1) +
+## #   lag(season, 12)) * (1 + remainder)
+##    .model          index mdeaths level slope season remainder
+##    &lt;chr&gt;           &lt;mth&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;
+##  1 ETS(mdeaths) 1973 Jan      NA    NA    NA   611.        NA
+##  2 ETS(mdeaths) 1973 Feb      NA    NA    NA   620.        NA
+##  3 ETS(mdeaths) 1973 Mar      NA    NA    NA   483.        NA
+##  4 ETS(mdeaths) 1973 Apr      NA    NA    NA   122.        NA
+##  5 ETS(mdeaths) 1973 May      NA    NA    NA  -207.        NA
+##  6 ETS(mdeaths) 1973 Jun      NA    NA    NA  -304.        NA
+##  7 ETS(mdeaths) 1973 Jul      NA    NA    NA  -370.        NA
+##  8 ETS(mdeaths) 1973 Aug      NA    NA    NA  -476.        NA
+##  9 ETS(mdeaths) 1973 Sep      NA    NA    NA  -485.        NA
+## 10 ETS(mdeaths) 1973 Oct      NA    NA    NA  -246.        NA
+## # … with 74 more rows</code></pre>
+<pre><code>## Warning: Removed 11 rows containing missing values (geom_path).</code></pre>
 <p><img src="tidy-forecasting_files/figure-html/components-display-1.png" width="672" /></p>
 <p>It may also be worth storing how these components can be used to produce the response, which can be used for <a href="https://mitchelloharawild.github.io/tidy-forecasting-principles/advanced.html#decomposition">decomposition modelling</a>.</p>
 
