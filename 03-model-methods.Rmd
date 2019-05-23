@@ -12,6 +12,7 @@ For example, the `tsibbledata::olympic_running` dataset contains Olympic men's 4
 
 ```{r mens400, echo = FALSE}
 library(tsibbledata)
+library(tidyverse)
 olympic_running %>%
   ggplot(aes(x=Year, y = Time, colour = Sex)) +
   geom_line() +
@@ -129,9 +130,9 @@ ggplot(NULL, aes(x = Time, y = Demand)) +
 
 ## Simulation
 
-Much like the [tidymodels opinion](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) toward `predict`, `imitate` should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.
+Much like the [tidymodels opinion](https://tidymodels.github.io/model-implementation-principles/model-predictions.html#input-data) toward `predict`, `generate` should not default to an archived version of the training set. This allows models to be used for simulating new data sets, which is especially relevant for time series as often future paths beyond the training set are simulated.
 
-The imitate method for a fable model should accept these arguments (names chosen for consistency with `tidymodels`):
+The generate method for a fable model should accept these arguments (names chosen for consistency with `tidymodels`):
 
 * object: The model itself
 * new_data: The data used for simulation
@@ -159,7 +160,7 @@ library(fable)
 library(tsibbledata)
 UKLungDeaths %>% 
   model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
-  imitate(UKLungDeaths, times = 5)
+  generate(UKLungDeaths, times = 5)
 ```
 
 ```{r sim-example-eval, echo = FALSE, cache = TRUE}
@@ -167,7 +168,7 @@ library(fable)
 library(tsibbledata)
 sim1 <- UKLungDeaths %>% 
   model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
-  imitate(UKLungDeaths, times = 5)
+  generate(UKLungDeaths, times = 5)
 sim1
 library(ggplot2)
 ggplot(UKLungDeaths, aes(x = index, y = mdeaths)) + 
@@ -177,14 +178,14 @@ ggplot(UKLungDeaths, aes(x = index, y = mdeaths)) +
 ```
 
 
-Or, to imitate beyond the sample:
+Or, to generate data beyond the sample:
 
 ```{r sim-future, eval = FALSE}
 library(lubridate)
 UKLungDeaths %>% 
   filter(year(index) <= 1978) %>% 
   model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
-  imitate(
+  generate(
     UKLungDeaths %>% filter(year(index) > 1978),
     times = 5
   )
@@ -194,7 +195,7 @@ library(lubridate)
 sim2 <- UKLungDeaths %>% 
   filter(year(index) <= 1978) %>% 
   model(lm = TSLM(mdeaths ~ fourier("year", K = 4) + fdeaths)) %>% 
-  imitate(
+  generate(
     UKLungDeaths %>% filter(year(index) > 1978),
     times = 5
   )

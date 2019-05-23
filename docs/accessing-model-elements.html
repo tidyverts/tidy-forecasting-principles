@@ -24,7 +24,7 @@
 
 
 
-<meta name="date" content="2019-03-14">
+<meta name="date" content="2019-05-23">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -200,8 +200,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The <code>print</code> and <code>summary</code> methods are standard displays for fitted models. The <code>print</code> method typically displays a limited amount of key information, such as the model that was fit, and the estimated coefficients. The <code>summary</code> function extends the <code>print</code> method with a more detailed summary of fit, which may include measures for goodness of fit, and significance of model terms.</p>
 <p>As fable naturally supports batch/multiple forecasting, the print method is standardised for any number of models. A very short model specific display can be defined using the <code>model_sum</code> generic, which is shown in the mable.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tsibbledata)
-UKLungDeaths &lt;-<span class="st"> </span><span class="kw">as_tsibble</span>(<span class="kw">cbind</span>(mdeaths, fdeaths), <span class="dt">gather =</span> <span class="ot">FALSE</span>)
-ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
+UKLungDeaths &lt;-<span class="st"> </span><span class="kw">as_tsibble</span>(<span class="kw">cbind</span>(mdeaths, fdeaths), <span class="dt">gather =</span> <span class="ot">FALSE</span>)</code></pre>
+<pre><code>## Warning: Argument `gather` is deprecated, please use `pivot_longer`
+## instead.</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">model</span>(<span class="kw">ETS</span>(mdeaths))</code></pre>
 <pre><code>## # A mable: 1 x 1
 ##   `ETS(mdeaths)`
@@ -210,74 +212,12 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 <p>The summary method can then be used to reveal more information about this model, such as fitted parameters and goodness of fit. Ideally this information would also be standardised into a tabular form for batch modelling, although this is currently not the case.</p>
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>summary</code></pre>
-<pre><code>## $par
-## # A tibble: 16 x 2
-##    term      estimate
-##    &lt;chr&gt;        &lt;dbl&gt;
-##  1 alpha     0.000207
-##  2 beta      0.000187
-##  3 gamma     0.000118
-##  4 l      1672.      
-##  5 b        -4.33    
-##  6 s0      373.      
-##  7 s1     -121.      
-##  8 s2     -246.      
-##  9 s3     -485.      
-## 10 s4     -476.      
-## 11 s5     -370.      
-## 12 s6     -304.      
-## 13 s7     -207.      
-## 14 s8      122.      
-## 15 s9      483.      
-## 16 s10     620.      
-## 
-## $est
-## # A tsibble: 72 x 4 [1M]
-##       index mdeaths .fitted   .resid
-##       &lt;mth&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
-##  1 1974 Jan    2134   2278. -0.0633 
-##  2 1974 Feb    1863   2283. -0.184  
-##  3 1974 Mar    1877   2142. -0.124  
-##  4 1974 Apr    1877   1776.  0.0569 
-##  5 1974 May    1492   1442.  0.0346 
-##  6 1974 Jun    1249   1341. -0.0689 
-##  7 1974 Jul    1280   1270.  0.00764
-##  8 1974 Aug    1131   1160. -0.0248 
-##  9 1974 Sep    1209   1147.  0.0544 
-## 10 1974 Oct    1492   1381.  0.0805 
-## # … with 62 more rows
-## 
-## $fit
-## # A tibble: 1 x 8
-##    sigma logLik   AIC  AICc   BIC    MSE   AMSE    MAE
-##    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 0.0951  -500. 1033. 1045. 1072. 24137. 23441. 0.0657
-## 
-## $states
-## # A tsibble: 73 x 15 [1M]
-##         index     l     b    s1    s2    s3    s4    s5    s6    s7    s8
-##         &lt;mth&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1   1973 Dec 1672. -4.33  373. -121. -246. -485. -476. -370. -304. -207.
-##  2   1974 Jan 1667. -4.36  611.  373. -121. -246. -485. -476. -370. -304.
-##  3   1974 Feb 1663. -4.44  620.  611.  373. -121. -246. -485. -476. -370.
-##  4   1974 Mar 1658. -4.49  483.  620.  611.  373. -121. -246. -485. -476.
-##  5   1974 Apr 1654. -4.47  122.  483.  620.  611.  373. -121. -246. -485.
-##  6   1974 May 1649. -4.46 -207.  122.  483.  620.  611.  373. -121. -246.
-##  7   1974 Jun 1645. -4.48 -304. -207.  122.  483.  620.  611.  373. -121.
-##  8   1974 Jul 1640. -4.48 -370. -304. -207.  122.  483.  620.  611.  373.
-##  9   1974 Aug 1636. -4.48 -476. -370. -304. -207.  122.  483.  620.  611.
-## 10   1974 Sep 1632. -4.47 -485. -476. -370. -304. -207.  122.  483.  620.
-## # … with 63 more rows, and 4 more variables: s9 &lt;dbl&gt;, s10 &lt;dbl&gt;,
-## #   s11 &lt;dbl&gt;, s12 &lt;dbl&gt;
-## 
-## $spec
-## # A tibble: 1 x 5
-##   errortype trendtype seasontype damped period
-##   &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;      &lt;lgl&gt;   &lt;dbl&gt;
-## 1 M         A         A          FALSE      12
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;ETS&quot;</code></pre>
+<pre><code>##        Length Class  Mode
+## par     2     tbl_df list
+## est     4     tbl_ts list
+## fit     8     tbl_df list
+## states 15     tbl_ts list
+## spec    5     tbl_df list</code></pre>
 </div>
 <div id="fitted-values-and-residuals" class="section level2">
 <h2><span class="header-section-number">4.2</span> Fitted values and residuals</h2>
@@ -342,9 +282,9 @@ ets_fit &lt;-<span class="st"> </span>UKLungDeaths <span class="op">%&gt;%</span
 <pre class="sourceCode r"><code class="sourceCode r">ets_fit <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>glance</code></pre>
 <pre><code>## # A tibble: 1 x 9
-##   .model        sigma logLik   AIC  AICc   BIC    MSE   AMSE    MAE
-##   &lt;chr&gt;         &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 ETS(mdeaths) 0.0951  -500. 1033. 1045. 1072. 24137. 23441. 0.0657</code></pre>
+##   .model        sigma2 logLik   AIC  AICc   BIC    MSE   AMSE    MAE
+##   &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 ETS(mdeaths) 0.00905  -500. 1033. 1045. 1072. 24137. 23441. 0.0657</code></pre>
 </div>
 <div id="components" class="section level2">
 <h2><span class="header-section-number">4.4</span> Components</h2>
